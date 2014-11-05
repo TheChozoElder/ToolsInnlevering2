@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
 using System.Windows;
 using innlevering2.ViewModel;
+
 
 namespace innlevering2
 {
@@ -16,16 +17,19 @@ namespace innlevering2
 
 		[DataMember]
 		internal int maxHealth;
+
 		[DataMember]
 		internal int scale;
+
 		[DataMember]
 		internal int movementSpeed;
-		[DataMember]
-		internal int maxHp;
+
 		[DataMember]
 		internal int regenerateSpeed;
+
 		[DataMember]
 		internal bool invisible;
+
 		[DataMember]
 		internal int aimingSpeed;
 	}
@@ -54,17 +58,28 @@ namespace innlevering2
 		{
 			var enemy = new Enemy
 			{
-				maxHp = 12, 
-				name = "Flasha"
-
+				name = "Flasha",
+				aimingSpeed = 3,
+				invisible = false,
+				maxHealth = 12,
+				movementSpeed = 10,
+				regenerateSpeed = 12,
+				scale = 1
 			};
 
-			var ser = new DataContractJsonSerializer(typeof(Enemy));
+			var json = JsonConvert.SerializeObject(enemy);
+
 			var fileName = @"E:\sak\file.txt";
-			var file = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-			ser.WriteObject(file, enemy);
-			file.SetLength(file.Position);
-			file.Close();
+
+			using (var fs = File.Open(@"E:\sak\file.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+			using (var sw = new StreamWriter(fs))
+			using (var jw = new JsonTextWriter(sw))
+			{
+				jw.Formatting = Formatting.Indented;
+
+				var serializer = new JsonSerializer();
+				serializer.Serialize(jw, json);
+			}
 		}
 	}
 }
