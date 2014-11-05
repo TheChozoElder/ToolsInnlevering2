@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="UMLClassDiagram1">
+  <logicalClassDesignerModelMoniker Id="72e5b3de-b1f6-491c-b78e-e21260ed41e3" />
+  <nestedChildShapes>
+    <classShape Id="c6059a3a-bc7e-4e09-a886-7414aca0e806" absoluteBounds="2.625, 1.125, 1.5, 1.7031249602635703" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="17ec9c67-bad6-481e-b85f-eeed5c1e7135" LastKnownName="Buzzer" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="d6893267-0751-4d52-8615-78df2e6a469f" absoluteBounds="2.64, 1.5150000000000001, 1.4700000000000002, 1.0019530927141507" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="9c5354d9-f8e7-433d-a1a0-69717252b37e" absoluteBounds="2.64, 2.5269530927141508, 1.4700000000000002, 0.20117186754941963" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a0c12d37-9df9-47c1-9742-eaaafacc59a5" absoluteBounds="4.375, 1.125, 1.5, 1.8632812052965169" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="fbe5afe4-0e2a-4e06-9a88-3b1ee2b65d12" LastKnownName="Mech" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="0369c027-37f3-46ad-a59b-4e537803e733" absoluteBounds="4.3900000000000006, 1.5150000000000001, 1.4700000000000002, 1.162109337747097" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="3105211b-1d41-4276-9bc1-83bcc723700e" absoluteBounds="4.39, 2.6871093377470974, 1.4700000000000002, 0.20117186754941963" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a6b98353-3323-4bef-830d-53c8b27e8bd9" absoluteBounds="6.125, 1.125, 1.5, 1.7031249602635703" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="57540b69-5200-429f-81d4-4cb76d22acfc" LastKnownName="Spider" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="52021839-4b82-41e7-9418-7e08ebff9343" absoluteBounds="6.14, 1.5150000000000001, 1.4700000000000002, 1.0019530927141507" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="92fad383-1fd4-46f3-a509-723f24515185" absoluteBounds="6.14, 2.5269530927141508, 1.4700000000000002, 0.20117186754941963" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="370a4710-fd10-4042-b017-a6f0342b8405" absoluteBounds="0.875, 1.125, 1.5, 1.7031249602635703" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="86ad8ddf-1c42-464f-9e0a-36f093ff95d6" LastKnownName="Kamikaze buzzer" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="62d87420-c8be-43fa-95af-d60ae37e03f4" absoluteBounds="0.89000000000000012, 1.5150000000000001, 1.4700000000000002, 1.0019530927141507" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="a07d3fd1-9c5b-453e-8d11-63228049a351" absoluteBounds="0.89, 2.5269530927141508, 1.4700000000000002, 0.20117186754941963" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <commentShape Id="9be97286-fd66-4729-8aa9-18b4eaa0fed7" absoluteBounds="4.5, 3.125, 1.25, 0.5" customColor="251, 247, 200">
+      <commentMoniker Id="8b9c85dc-8dab-4ed2-8238-8f1731437781" />
+      <relativeChildShapes />
+    </commentShape>
+  </nestedChildShapes>
+</logicalClassDesignerDiagram>

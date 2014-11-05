@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="72e5b3de-b1f6-491c-b78e-e21260ed41e3" name="UMLClassDiagram1" linkedPackageId="45450ab3-14db-4d74-9d9e-4a036ffa2ee8" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <ownedCommentsInternal>
+    <comment Id="8b9c85dc-8dab-4ed2-8238-8f1731437781">
+      <elementDefinition Id="549314b1-1f7d-4a23-8938-be170fe42080" />
+      <body>Finnes også en "mech with noise"-prefab som må endres</body>
+    </comment>
+  </ownedCommentsInternal>
+  <profileInstances>
+    <packageHasProfileInstances Id="1124753d-699f-4011-b2aa-5fbcdf34275f">
+      <profileInstance Id="e496cd38-76dd-4751-8949-5462034439fc" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="bd2050b8-952a-4baf-a15f-02bb85e2af27">
+      <profileInstance Id="0284bd8b-8db0-4243-b6a7-07bf9f1ad184" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="17ec9c67-bad6-481e-b85f-eeed5c1e7135" name="Buzzer" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="3b4c0454-8ccf-4a9f-badf-5b64ed6fbb87" />
+        <ownedAttributesInternal>
+          <property Id="377d8266-7b61-433f-9296-ab2e78b972bc" name="Flying speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="2d9c1279-7cce-42a6-84b1-1a65d0dbe5f3" />
+          </property>
+          <property Id="87c05514-78dc-433e-896d-d74b2bcb9cc4" name="Max health" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="b38f804b-2a91-45e1-9dba-d8234aaf80d0" />
+          </property>
+          <property Id="405e2d5c-16c7-4ff3-b0b8-0a1ccbe469d9" name="Regenerate speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="187d9dd9-2d9c-4abf-ae5c-e6075b9cff1c" />
+          </property>
+          <property Id="cbbcd0fe-cdd5-4e3e-84ff-f70922cbb4cd" name="Invincible" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="7ef5df52-d15a-4060-8b5c-36c26c5999aa" />
+          </property>
+          <property Id="37628882-704c-4c4d-9095-bdf0ad927a9e" name="Scale" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="cb752e36-ae1a-4e64-ba54-1c0127065cc2" />
+          </property>
+        </ownedAttributesInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="fbe5afe4-0e2a-4e06-9a88-3b1ee2b65d12" name="Mech" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="df69eda9-c79c-4563-aad2-e3b855e76316" />
+        <ownedAttributesInternal>
+          <property Id="26794e00-5181-4479-95ca-afba3f4524c6" name="Max health" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="60b8a30a-2994-4743-baa2-60c81c1ac7e7" />
+          </property>
+          <property Id="7d0fb7df-7ace-4f43-9fe0-14c08ac478cf" name="Regenerate speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="37a29e34-81ae-4116-85cb-149aabf2613e" />
+          </property>
+          <property Id="ef0f52c1-e865-4d8e-bc65-89485f08d9b5" name="Invincible" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="b92d01db-de11-420c-8ae8-907728a5f4ea" />
+          </property>
+          <property Id="45cd37e6-2774-40eb-8185-12a5c66f3650" name="Scale" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="9ffbf5ca-0b0f-453c-b565-c79255dd68bf" />
+          </property>
+          <property Id="26f014a6-ce37-4df6-a78b-ed27bbcbab00" name="Walking speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="f924dc3f-768d-472a-a89a-87a022284dcc" />
+          </property>
+          <property Id="67d3bf8f-c076-4daf-b2c6-73b0a9605145" name="Aiming speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="326197b5-bff6-4cc8-8e8e-07501498d19a" />
+          </property>
+        </ownedAttributesInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="57540b69-5200-429f-81d4-4cb76d22acfc" name="Spider" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="d2fa09ea-b9d9-4125-9692-211928270d04" />
+        <ownedAttributesInternal>
+          <property Id="6a28d990-b360-4401-8413-0013530ff8b2" name="Max health" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="321eb6d2-269c-4137-bbef-a4e8c7870a85" />
+          </property>
+          <property Id="d6a5baaf-12a1-4cc3-9a1a-1d074984239c" name="Regenerate speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="66eb3deb-ee3f-4683-bf26-72ab3b0243e9" />
+          </property>
+          <property Id="3a67201f-d036-449f-b47f-31446721977e" name="Invincible" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="138a1468-0ec8-4810-84da-c1b58fd4164f" />
+          </property>
+          <property Id="ad8596ca-5825-43c7-b6fe-ed1cab1f48d1" name="Scale" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="d8eba67f-9e32-4afe-b2ca-482be60ae0cf" />
+          </property>
+          <property Id="e6d5434f-90af-4f6e-bde2-17bb70d6ce22" name="Walking speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="f8ee28fd-9105-4d03-90ea-ead2e77615d7" />
+          </property>
+        </ownedAttributesInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="86ad8ddf-1c42-464f-9e0a-36f093ff95d6" name="Kamikaze buzzer" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="013deaf3-4a6f-4b86-b4f4-5687ecd9faa3" />
+        <ownedAttributesInternal>
+          <property Id="b8385653-76a3-4bff-9f62-d882011e58ab" name="Flying speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="a7878f5f-e1e2-41b0-bb67-06f343f2c426" />
+          </property>
+          <property Id="9001306d-e9a5-40ee-951e-586b1f1e116d" name="Max health" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="72a13d0c-8c27-4a45-816e-2b16530b49f4" />
+          </property>
+          <property Id="215684cf-bf56-49a9-8a46-58c125c753be" name="Regenerate speed" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="498ee36a-6ac4-42a5-b51c-d40b22a1bdec" />
+          </property>
+          <property Id="6871beee-dbe0-465b-938c-4012c8217d55" name="Invincible" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="24fea59e-a293-4f30-b4e8-8e1e5eacce33" />
+          </property>
+          <property Id="f3690032-ffb8-4d1e-a8a1-0583d0fbcf5c" name="Scale" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="997d5058-543c-4be2-9c25-2449e089b4ee" />
+          </property>
+        </ownedAttributesInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+  </packagedElements>
+  <package Id="45450ab3-14db-4d74-9d9e-4a036ffa2ee8" name="StatsOverview">
+    <elementDefinition Id="5639f366-a2d2-456b-bf9c-cc06104f1c67" />
+  </package>
+</logicalClassDesignerModel>
