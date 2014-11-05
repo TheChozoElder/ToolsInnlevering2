@@ -20,7 +20,7 @@
 
     <Grid x:Name="LayoutRoot">
 
-        <TabControl>
+        <TabControl SelectionChanged="TabControl_SelectionChanged">
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -31,10 +31,11 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="special enemies" Margin="2,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Special enemies" Margin="2,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </TabItem.Header>
             </TabItem>
+            <Button Content="Button" Height="100" Width="75" Margin="104,132,508,209" Click="Button_Click_1"/>
         </TabControl>
     </Grid>
 </Window>

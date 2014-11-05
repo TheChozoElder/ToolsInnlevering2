@@ -1,16 +1,16 @@
 ﻿using GalaSoft.MvvmLight;
 using innlevering2.Model;
 
-namespace innlevering2.ViewModel
-{
+namespace innlevering2.ViewModel {
+
+
 	/// <summary>
 	/// This class contains properties that the main View can data bind to.
 	/// <para>
 	/// See http://www.galasoft.ch/mvvm
 	/// </para>
 	/// </summary>
-	public class MainViewModel : ViewModelBase
-	{
+	public class MainViewModel : ViewModelBase {
 		private readonly IDataService _dataService;
 
 		/// <summary>
@@ -24,8 +24,7 @@ namespace innlevering2.ViewModel
 		/// Gets the WelcomeTitle property.
 		/// Changes to that property's value raise the PropertyChanged event. 
 		/// </summary>
-		public string WelcomeTitle
-		{
+		public string WelcomeTitle {
 			get
 			{
 				return _welcomeTitle;
@@ -61,6 +60,8 @@ namespace innlevering2.ViewModel
 					WelcomeTitle = item.Title;
 				});
 		}
+
+
 
 		////public override void Cleanup()
 		////{
