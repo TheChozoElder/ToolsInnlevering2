@@ -13,7 +13,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="View/Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -24,18 +24,19 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Enemies" Margin="2,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Player" Margin="2,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </TabItem.Header>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Special enemies" Margin="2,0,0,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Enemies" Margin="2,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </TabItem.Header>
+                <Button Content="Button" Height="100" Width="75" Margin="303,132,304,209" Click="Button_Click_1" RenderTransformOrigin="-0.313,-0.268"/>
+
             </TabItem>
-            <Button Content="Button" Height="100" Width="75" Margin="104,132,508,209" Click="Button_Click_1"/>
         </TabControl>
     </Grid>
 </Window>
