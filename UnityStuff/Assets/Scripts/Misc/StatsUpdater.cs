@@ -15,20 +15,17 @@ public class Enemy
 	}
 
 }
+
 public class StatsUpdater : MonoBehaviour
 {
-
-	private GameObject enemies;
-
 	// Use this for initialization
 	void Start ()
 	{
 
         var fileName = @"Assets\Scripts\Misc\stats.json";
-
 	    string serialized = "";
+        GameObject enemies = GameObject.Find("Enemies");
 
-	    enemies = GameObject.Find("Enemies");
         foreach (Transform child in enemies.transform)
         {
 			var enemy = new Enemy();
