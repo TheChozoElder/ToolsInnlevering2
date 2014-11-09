@@ -3,7 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 
 
-public class Enemy : MonoBehaviour
+public class Enemy
 {
 	public string Name { get; set; }
 
@@ -24,7 +24,9 @@ public class StatsUpdater : MonoBehaviour
 	void Start ()
 	{
 
-		var fileName = @"E:\sak\file.json";
+        var fileName = @"Assets\Scripts\Misc\stats.json";
+
+	    string serialized = "";
 
 	    enemies = GameObject.Find("Enemies");
         foreach (Transform child in enemies.transform)
@@ -32,12 +34,11 @@ public class StatsUpdater : MonoBehaviour
 			var enemy = new Enemy();
 			enemy.Name = child.name;
 
-	        var jsonString = Enemy.Serialize(enemy);
-
-			using (var writer = new StreamWriter(fileName))
-	        {
-		        writer.Write(jsonString);
-	        }
+            serialized += Enemy.Serialize(enemy);
+        }
+        using (var writer = new StreamWriter(fileName))
+        {
+            writer.Write(serialized);
         }
 
 	}
