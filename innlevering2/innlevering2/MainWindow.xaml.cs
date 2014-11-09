@@ -3,36 +3,11 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using System.Windows;
 using innlevering2.ViewModel;
+using innlevering2.Model;
 
 
 namespace innlevering2
 {
-
-
-	[DataContract]
-	class Enemy
-	{
-		[DataMember]
-		internal string name;
-
-		[DataMember]
-		internal int maxHealth;
-
-		[DataMember]
-		internal int scale;
-
-		[DataMember]
-		internal int movementSpeed;
-
-		[DataMember]
-		internal int regenerateSpeed;
-
-		[DataMember]
-		internal bool invisible;
-
-		[DataMember]
-		internal int aimingSpeed;
-	}
 
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -53,33 +28,46 @@ namespace innlevering2
 
 		}
 
-
 		private void Button_Click_1(object sender, RoutedEventArgs e)
 		{
-			var enemy = new Enemy
-			{
-				name = "Flasha",
-				aimingSpeed = 3,
-				invisible = false,
-				maxHealth = 12,
-				movementSpeed = 10,
-				regenerateSpeed = 12,
-				scale = 1
-			};
-
-			var json = JsonConvert.SerializeObject(enemy);
 
 			var fileName = @"E:\sak\file.txt";
+			var otherFile = @"E:\sak\Smile.txt";
 
-			using (var fs = File.Open(@"E:\sak\file.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite))
-			using (var sw = new StreamWriter(fs))
-			using (var jw = new JsonTextWriter(sw))
+			var enemy = new Enemy
 			{
-				jw.Formatting = Formatting.Indented;
+				Name = "Flasha",
+				AimingSpeed = 3,
+				Invisible = false,
+				MaxHealth = 12,
+				MovementSpeed = 10,
+				RegenerateSpeed = 12,
+				Scale = 1
+			};
 
-				var serializer = new JsonSerializer();
-				serializer.Serialize(jw, json);
+			var path = @"E:\sak\fileb.json";
+
+			// Serialize Character to json string.
+			var jsonString = Enemy.Serialize(enemy);
+
+			// Write string to file.
+			using (var writer = new StreamWriter(path))
+			{
+				writer.Write(jsonString);
 			}
+
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			var path = @"E:\sak\smile.json";
+
+			var jsonStream = new StreamReader(path);
+			var jsonString = jsonStream.ReadToEnd();
+
+			var savedCharacter = Enemy.Deserialize(jsonString);
+
+//			PopulateView(enemies);
 		}
 	}
 }
