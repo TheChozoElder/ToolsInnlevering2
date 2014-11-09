@@ -1,21 +1,45 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.IO;
+using Newtonsoft.Json;
 
+
+public class Enemy : MonoBehaviour
+{
+	public string Name { get; set; }
+
+	public static string Serialize(Enemy enemy)
+	{
+		var settings = new JsonSerializerSettings();
+
+		return JsonConvert.SerializeObject(enemy, Formatting.Indented, settings);
+	}
+
+}
 public class StatsUpdater : MonoBehaviour
 {
 
-    private GameObject enemies;
+	private GameObject enemies;
 
 	// Use this for initialization
 	void Start ()
 	{
+
+		var fileName = @"E:\sak\file.json";
+
 	    enemies = GameObject.Find("Enemies");
-	    int count = 0;
         foreach (Transform child in enemies.transform)
         {
-            count++;
-            Debug.Log(count + " " + child.name);
+			var enemy = new Enemy();
+			enemy.Name = child.name;
+
+	        var jsonString = Enemy.Serialize(enemy);
+
+			using (var writer = new StreamWriter(fileName))
+	        {
+		        writer.Write(jsonString);
+	        }
         }
+
 	}
 	
 	// Update is called once per frame
