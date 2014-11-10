@@ -28,13 +28,22 @@
                     </StackPanel>
                 </TabItem.Header>
             </TabItem>
-            <TabItem>
+            <TabItem HorizontalAlignment="Left" Width="62">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Enemies" Margin="2,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </TabItem.Header>
-                <Button Content="Button" Height="100" Width="75" Margin="164,0,447,0" RenderTransformOrigin="0.505,0.562"/>
+                <Button Content="Button" Click="Button_Click_1" Margin="209,137,244,200" RenderTransformOrigin="0.505,0.493">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-720"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
             </TabItem>
             <Button Content="Låvd" Height="100" Width="75" Click="Button_Click"/>
         </TabControl>

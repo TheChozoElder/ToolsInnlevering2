@@ -7,31 +7,39 @@ using Newtonsoft.Json;
 
 namespace innlevering2.Model
 {
-	class Enemy
+
+	class EnemyList
 	{
+//		[JsonProperty("Enemy")]
+		public List<Enemy> ListOfEnemies { get; set; }
 
-		public string Name;
-		public int MaxHealth;
-		public int Scale;
-		public int MovementSpeed;
-		public int RegenerateSpeed;
-		public bool Invisible;
-		public int AimingSpeed;
-
-		public static string Serialize(Enemy enemy)
+		public string Serialize()
 		{
 			var settings = new JsonSerializerSettings();
 			//settings.Xxx = ...;
 			//settings.Converters.Add(new Xxx());
 
 			// Convert object to json string.
-			return JsonConvert.SerializeObject(enemy, Formatting.Indented, settings);
+			return JsonConvert.SerializeObject(ListOfEnemies, Formatting.Indented, settings);;
 		}
 
-		public static Enemy Deserialize(string jsonData)
+		public EnemyList Deserialize(string jsonData)
 		{
-			return JsonConvert.DeserializeObject<Enemy>(jsonData);
+			return JsonConvert.DeserializeObject<EnemyList>(jsonData);
 		}
+
+	}
+
+	class Enemy
+	{
+
+		public string Name { get; set; }
+		public int MaxHealth { get; set; }
+		public int Scale { get; set; }
+		public int MovementSpeed { get; set; }
+		public int RegenerateSpeed { get; set; }
+		public bool Invisible { get; set; }
+		public int AimingSpeed { get; set; }
 
 	}
 }

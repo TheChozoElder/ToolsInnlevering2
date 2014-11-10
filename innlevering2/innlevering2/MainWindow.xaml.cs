@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using System.Windows;
@@ -31,43 +32,71 @@ namespace innlevering2
 		private void Button_Click_1(object sender, RoutedEventArgs e)
 		{
 
-			var fileName = @"E:\sak\file.txt";
-			var otherFile = @"E:\sak\Smile.txt";
+			var listaaa = new EnemyList() {ListOfEnemies = new List<Enemy>()};
 
-			var enemy = new Enemy
+			var enemy1 = new Enemy
 			{
-				Name = "Flasha",
+				Name = "Karl",
 				AimingSpeed = 3,
 				Invisible = false,
 				MaxHealth = 12,
 				MovementSpeed = 10,
 				RegenerateSpeed = 12,
 				Scale = 1
+			}; 
+			var enemy2 = new Enemy
+			{
+				Name = "Adrian",
+				AimingSpeed = 3,
+				Invisible = true,
+				MaxHealth = 12,
+				MovementSpeed = 10,
+				RegenerateSpeed = 12,
+				Scale = 13
 			};
 
-			var path = @"E:\sak\fileb.json";
+			listaaa.ListOfEnemies.Add(enemy1);
+			listaaa.ListOfEnemies.Add(enemy2);
 
-			// Serialize Character to json string.
-			var jsonString = Enemy.Serialize(enemy);
+			var path = @"E:\sak\file.json";
 
-			// Write string to file.
 			using (var writer = new StreamWriter(path))
 			{
-				writer.Write(jsonString);
+				writer.Write((listaaa.Serialize()));
 			}
 
 		}
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-			var path = @"E:\sak\smile.json";
+			var listaaa = new EnemyList { ListOfEnemies = new List<Enemy>() };
+
+
+			var path = @"E:\sak\file.json";
 
 			var jsonStream = new StreamReader(path);
 			var jsonString = jsonStream.ReadToEnd();
 
-			var savedCharacter = Enemy.Deserialize(jsonString);
+
+			listaaa.Deserialize(jsonString);
+
+
+
+//			var enemy = JsonConvert.DeserializeObject<EnemyJson>(jsonString);
+//
+//			enemyList.Add(enemy);
+
+
+
+
+//			var savedCharacter = Enemy.Deserialize(jsonString);
 
 //			PopulateView(enemies);
+		}
+
+		private void Button_Click_2(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }
