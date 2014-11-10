@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using System.Windows;
@@ -15,6 +17,10 @@ namespace innlevering2
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+
+		string Path { get; set; }
+
+		EnemyList EnemyList { get; set; }
 		/// <summary>
 		/// Initializes a new instance of the MainWindow class.
 		/// </summary>
@@ -22,81 +28,38 @@ namespace innlevering2
 		{
 			InitializeComponent();
 			Closing += (s, e) => ViewModelLocator.Cleanup();
+
+			//Initialize stuff
+			EnemyList = new EnemyList {ListOfEnemies = new List<Enemy>()};
+			Path = @"E:\sak\file.json";
 		}
 
-		private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+
+		private void ExportButton(object sender, RoutedEventArgs e)
 		{
 
-		}
-
-		private void Button_Click_1(object sender, RoutedEventArgs e)
-		{
-
-			var listaaa = new EnemyList() {ListOfEnemies = new List<Enemy>()};
-
-			var enemy1 = new Enemy
+			if (!EnemyList.ListOfEnemies.Any())
 			{
-				Name = "Karl",
-				AimingSpeed = 3,
-				Invisible = false,
-				MaxHealth = 12,
-				MovementSpeed = 10,
-				RegenerateSpeed = 12,
-				Scale = 1
-			}; 
-			var enemy2 = new Enemy
+				Console.WriteLine("Nothing to serialize!");
+				return;
+			}
+
+			using (var writer = new StreamWriter(Path))
 			{
-				Name = "Adrian",
-				AimingSpeed = 3,
-				Invisible = true,
-				MaxHealth = 12,
-				MovementSpeed = 10,
-				RegenerateSpeed = 12,
-				Scale = 13
-			};
-
-			listaaa.ListOfEnemies.Add(enemy1);
-			listaaa.ListOfEnemies.Add(enemy2);
-
-			var path = @"E:\sak\file.json";
-
-			using (var writer = new StreamWriter(path))
-			{
-				writer.Write((listaaa.Serialize()));
+				writer.Write((EnemyList.Serialize()));
 			}
 
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
+		private void ImportButton(object sender, RoutedEventArgs e)
 		{
-			var listaaa = new EnemyList { ListOfEnemies = new List<Enemy>() };
 
-
-			var path = @"E:\sak\file.json";
-
-			var jsonStream = new StreamReader(path);
+			var jsonStream = new StreamReader(Path);
 			var jsonString = jsonStream.ReadToEnd();
 
+			EnemyList.Deserialize(jsonString);
 
-			listaaa.Deserialize(jsonString);
-
-
-
-//			var enemy = JsonConvert.DeserializeObject<EnemyJson>(jsonString);
-//
-//			enemyList.Add(enemy);
-
-
-
-
-//			var savedCharacter = Enemy.Deserialize(jsonString);
-
-//			PopulateView(enemies);
-		}
-
-		private void Button_Click_2(object sender, RoutedEventArgs e)
-		{
-
+			jsonStream.Close();
 		}
 	}
 }

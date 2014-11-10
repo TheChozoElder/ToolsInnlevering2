@@ -23,7 +23,7 @@ namespace innlevering2.Model
 			//settings.Xxx = ...;
 			//settings.Converters.Add(new Xxx());
 
-			//DEBUG
+			//TODO: Remove this when you're done DEBUGGING!!
 			PrintList();
 
 			// Convert object to json string.
@@ -33,19 +33,11 @@ namespace innlevering2.Model
 		/// <summary>
 		/// Deserializes current enemylist to file
 		/// </summary>
-		public void Deserialize()
+		public void Deserialize(string jsonData)
 		{
+			ListOfEnemies = JsonConvert.DeserializeObject<List<Enemy>>(jsonData);
 
-			//TODO: Is this supposed to be here?
-			var path = @"E:\sak\file.json";
-
-			var jsonStream = new StreamReader(path);
-			var jsonString = jsonStream.ReadToEnd();
-			//TODO: end
-
-			ListOfEnemies = JsonConvert.DeserializeObject<List<Enemy>>(jsonString);
-
-			//DEBUG
+			//TODO: Remove this when you're done DEBUGGING!!
 			PrintList();
 		}
 

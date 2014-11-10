@@ -20,32 +20,37 @@
 
     <Grid x:Name="LayoutRoot">
 
-        <TabControl SelectionChanged="TabControl_SelectionChanged">
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Player" Margin="2,0,0,0" VerticalAlignment="Center" />
-                    </StackPanel>
-                </TabItem.Header>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TabControl Margin="10,0,10,0" x:Name="MyTabControl">
+            
+            <TabItem Header="Enemies">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Text="Enemy stats will be here" />
+                   
+                </Grid>
             </TabItem>
-            <TabItem HorizontalAlignment="Left" Width="62">
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Enemies" Margin="2,0,0,0" VerticalAlignment="Center" />
-                    </StackPanel>
-                </TabItem.Header>
-                <Button Content="Button" Click="Button_Click_1" Margin="209,137,244,200" RenderTransformOrigin="0.505,0.493">
-                    <Button.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="-720"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Button.RenderTransform>
-                </Button>
+            
+            <TabItem Header="Player">
+                <Grid Margin="10" >
+                    <TextBlock Text="Player stats / boss stats" />
+                </Grid>
             </TabItem>
-            <Button Content="Låvd" Height="100" Width="75" Click="Button_Click"/>
+            
         </TabControl>
+
+        <Button Content="Export to Json" Click="ExportButton" Grid.Row="1" Width="260" HorizontalAlignment="Left" Margin="10,0,0,10"/>
+        <Button Content="Change filepath" Click="ExportButton" Grid.Row="1" Width="100" Margin="0,0,0,15" />
+        <Button Content="Import from Json" Click="ImportButton" Grid.Row="1" Width="260" HorizontalAlignment="Right" Margin="0,0,10,10"/>
     </Grid>
 </Window>
