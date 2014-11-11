@@ -13,7 +13,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="View/Skins/MainSkin.xaml" />
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -51,13 +51,13 @@
         </TabControl>
 
         <WrapPanel Grid.Row="1" ToolBar.OverflowMode="Never" >
-            <Image x:Name="InfoIcon"  Margin="10" Source="Assets/good.png" Height ="32" HorizontalAlignment="Left" ></Image>
+            <Image x:Name="InfoIcon"  Margin="10" Source="../Assets/good.png" Height ="32" HorizontalAlignment="Left" ></Image>
             <TextBlock x:Name="Info" Text="Informative message goes here" VerticalAlignment="Center"></TextBlock>
         </WrapPanel>
 
-        <Button Content="Export to Json" Click="ExportButton" Grid.Row="2" Width="260" HorizontalAlignment="Left" Margin="10,0,0,10" MouseEnter="EnterSerializeButton" MouseLeave="LeaveField"/>
-        <Button Content="Change filepath" Click="ChangePath" Grid.Row="2" Width="100" Margin="0,0,0,15" MouseLeave="LeaveField" MouseEnter="EnterPathButton" />
-        <Button Content="Import from Json" Click="ImportButton" Grid.Row="2" Width="260" HorizontalAlignment="Right" Margin="0,0,10,10" MouseLeave="LeaveField" MouseEnter="EnterDeserializeButton"/>
+        <Button Content="Export to Json" Command="{Binding ExportCommand}" Grid.Row="2" Width="260" HorizontalAlignment="Left" Margin="10,0,0,10"/>
+        <Button Content="Change filepath" Command="{Binding FilePathCommand}" Grid.Row="2" Width="100" Margin="0,0,0,15"/>
+        <Button Content="Import from Json" Command="{Binding ImportCommand}" Grid.Row="2" Width="260" HorizontalAlignment="Right" Margin="0,0,10,10"/>
 
     </Grid>
 </Window>
