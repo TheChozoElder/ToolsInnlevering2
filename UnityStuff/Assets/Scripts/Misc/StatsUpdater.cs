@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
+using System.Reflection;
 
 public class StatsObject
 {
@@ -9,10 +11,15 @@ public class StatsObject
 
     public Vector3 Scale { get; set; }
 
-    public int MaxHealth { get; set; }
-    public int Health { get; set; }
-    public int RegenerateSpeed { get; set; }
+    public float MaxHealth { get; set; }
+    public float Health { get; set; }
+    public float RegenerateSpeed { get; set; }
     public bool Invincible { get; set; }
+
+    public float MovementSpeed { get; set; }
+    public float TurningSpeed { get; set; }
+    public float AimingSpeed { get; set; }
+
 
 	public static string Serialize(StatsObject enemy)
 	{
@@ -24,9 +31,8 @@ public class StatsObject
 
 public class StatsUpdater : MonoBehaviour
 {
-    const string FileName = @"Assets\Scripts\Misc\stats.json";
-
-    private const string enemyParentComponent = "Enemies";
+    private const string FileName = @"Assets\Scripts\Misc\stats.json";
+    private const string EnemyParentComponent = "Enemies";
 
     private List<GameObject> relevantGameObjects = new List<GameObject>();
 
@@ -35,11 +41,13 @@ public class StatsUpdater : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-        GameObject enemies = GameObject.Find(enemyParentComponent);
+        GameObject enemies = GameObject.Find(EnemyParentComponent);
 	    CheckForHealthScriptInChildren(enemies.transform);
 	    foreach (GameObject gameObject in relevantGameObjects)
 	    {
-	        
+	        StatsObject newStatsObject = new StatsObject { Name = gameObject.name, Scale = gameObject.transform.localScale};
+	        SetHealthVariables(gameObject, newStatsObject);
+            Debug.Log(newStatsObject.Name + " has a health of " + newStatsObject.Health);
 	    }
 	}
 
@@ -53,7 +61,38 @@ public class StatsUpdater : MonoBehaviour
             }
             else if(possiblyRelevantObject.childCount > 0)
             {
-                this.CheckForHealthScriptInChildren(possiblyRelevantObject);
+                CheckForHealthScriptInChildren(possiblyRelevantObject);
+            }
+        }
+    }
+
+    private void SetHealthVariables(GameObject inputObject, StatsObject outputObject)
+    {
+        Component health = inputObject.GetComponent("Health");
+        if (health != null)
+        {
+            Type type = health.GetType();
+            FieldInfo[] fields = type.GetFields();
+            int numberOfFoundFields = 0;
+            foreach (var field in fields)
+            {
+                switch (field.Name)
+                {
+                    case "maxHealth":
+                        outputObject.MaxHealth = (float)field.GetValue(health);
+                        numberOfFoundFields++;
+                        break;
+                    case "health":
+                        outputObject.Health = (float)field.GetValue(health);
+                        numberOfFoundFields++;
+                        break;
+                    case "regenerateSpeed":
+                        outputObject.RegenerateSpeed = (float)field.GetValue(health);
+                        numberOfFoundFields++;
+                        break;
+                }
+                if(numberOfFoundFields >= 3)
+                    break;
             }
         }
     }
