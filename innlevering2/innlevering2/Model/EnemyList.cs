@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace innlevering2.Model
 {
-	class EnemyList
+	public class EnemyList
 	{
 		//[JsonProperty("Enemy")]
 		public List<Enemy> ListOfEnemies { get; set; }

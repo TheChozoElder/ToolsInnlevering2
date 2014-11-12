@@ -1,6 +1,6 @@
 ﻿namespace innlevering2.Model
 {
-	class Enemy
+	public class Enemy
 	{
 		public string Name { get; set; }
 		public int MaxHealth { get; set; }
