@@ -1,14 +1,20 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class Enemy
+public class StatsObject
 {
 	public string Name { get; set; }
 
-    public int Health { get; set; }
+    public Vector3 Scale { get; set; }
 
-	public static string Serialize(Enemy enemy)
+    public int MaxHealth { get; set; }
+    public int Health { get; set; }
+    public int RegenerateSpeed { get; set; }
+    public bool Invincible { get; set; }
+
+	public static string Serialize(StatsObject enemy)
 	{
 		var settings = new JsonSerializerSettings();
 
@@ -20,25 +26,39 @@ public class StatsUpdater : MonoBehaviour
 {
     const string FileName = @"Assets\Scripts\Misc\stats.json";
 
+    private const string enemyParentComponent = "Enemies";
+
+    private List<GameObject> relevantGameObjects = new List<GameObject>();
+
+    private List<StatsObject> namedEntities = new List<StatsObject>();
+    private List<StatsObject> unnamedEntities = new List<StatsObject>();
 	// Use this for initialization
 	void Start ()
 	{
-	    string serialized = "";
-        GameObject enemies = GameObject.Find("Enemies");
-        
-        foreach (Transform child in enemies.transform)
-        {
-            var enemy = new Enemy { Name = child.name };
-
-            serialized += Enemy.Serialize(enemy);
-        }
-        using (var writer = new StreamWriter(FileName))
-        {
-            writer.Write(serialized);
-        }
+        GameObject enemies = GameObject.Find(enemyParentComponent);
+	    CheckForHealthScriptInChildren(enemies.transform);
+	    foreach (GameObject gameObject in relevantGameObjects)
+	    {
+	        
+	    }
 	}
-	
-	// Update is called once per frame
+
+    private void CheckForHealthScriptInChildren(Transform enemies)
+    {
+        foreach (Transform possiblyRelevantObject in enemies.transform)
+        {
+            if (possiblyRelevantObject.GetComponent("Health") != null)
+            {
+                relevantGameObjects.Add(possiblyRelevantObject.gameObject);
+            }
+            else if(possiblyRelevantObject.childCount > 0)
+            {
+                this.CheckForHealthScriptInChildren(possiblyRelevantObject);
+            }
+        }
+    }
+
+    // Update is called once per frame
 	void Update () {
 	
 	}
