@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 
 namespace innlevering2.Model
 {
-	public class EnemyList
+	public class StatsObjectList
 	{
 		//[JsonProperty("Enemy")]
-		public List<Enemy> ListOfEnemies { get; set; }
+		public List<StatsObject> ListOfEnemies { get; set; }
 
 		/// <summary>
 		/// Serializes current enemylist to file
@@ -35,7 +35,7 @@ namespace innlevering2.Model
 		/// </summary>
 		public void Deserialize(string jsonData)
 		{
-			ListOfEnemies = JsonConvert.DeserializeObject<List<Enemy>>(jsonData);
+			ListOfEnemies = JsonConvert.DeserializeObject<List<StatsObject>>(jsonData);
 
 			//TODO: Remove this when you're done DEBUGGING!!
 			PrintList();

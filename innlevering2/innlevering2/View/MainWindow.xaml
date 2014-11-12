@@ -33,21 +33,34 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="150"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Border Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
 
-                        <ListView Margin="10" ItemsSource="{Binding Path= Enemies}" >
+                        <ListView Margin="10" ItemsSource="{Binding StatsObjectList}" SelectedItem="{Binding SelectedEnemy}" >
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Width="140" Header="Game Name" DisplayMemberBinding="{Binding Path=Name}"  />
+                                    <GridViewColumn Width="140" Header="Name" DisplayMemberBinding="{Binding Name}"  />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        
+                    </Border>
+
+                    <Border Grid.Column="1" Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+
+                        <ListView Margin="10" ItemsSource="{Binding StatsObjectList}" >
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Width="100" Header="Property" DisplayMemberBinding="{Binding Invisible}"  />
+                                    <GridViewColumn Width="140" Header="Value" DisplayMemberBinding="{Binding RegenerateSpeed}"  />
                                 </GridView>
                             </ListView.View>
                         </ListView>
 
                     </Border>
-                   
+
                 </Grid>
             </TabItem>
             

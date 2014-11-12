@@ -1,6 +1,6 @@
 ﻿namespace innlevering2.Model
 {
-	public class Enemy
+	public class StatsObject
 	{
 		public string Name { get; set; }
 		public int MaxHealth { get; set; }

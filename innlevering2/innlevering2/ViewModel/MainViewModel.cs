@@ -19,9 +19,25 @@ namespace innlevering2.ViewModel {
 
 		#region Properties
 
-		public EnemyList EnemyList
+		public List<StatsObject> StatsObjectList {
+			get { return statsObjectList.ListOfEnemies; }
+			set
+			{
+				statsObjectList.ListOfEnemies = value;
+				RaisePropertyChanged();
+			} }
+
+		public int SelectedEnemy
 		{
-			get; set;
+			get
+			{
+				return selectedItem;
+			}
+			set
+			{
+				selectedItem = value;
+				RaisePropertyChanged();
+			}
 		}
 
 		#endregion
@@ -48,11 +64,13 @@ namespace innlevering2.ViewModel {
 
 		private string Path { get; set; }
 		private bool DeserializeButtonActive { get; set; }
+		private StatsObjectList statsObjectList { get; set; }
+		private int selectedItem { get; set; }
 
 		#endregion
 
 		public MainViewModel() {
-			EnemyList = new EnemyList { ListOfEnemies = new List<Enemy>() };
+			statsObjectList = new StatsObjectList { ListOfEnemies = new List<StatsObject>() };
 			DeserializeButtonActive = true;
 			Path = @"E:\sak\file.json";
 
@@ -66,31 +84,31 @@ namespace innlevering2.ViewModel {
 			ImportCommand = new RelayCommand(Import, CanImport);
 		}
 
-//		/// <summary>
-//		/// The <see cref="WelcomeTitle" /> property's name.
-//		/// </summary>
-//		public const string WelcomeTitlePropertyName = "WelcomeTitle";
-//
-//		private string _welcomeTitle = string.Empty;
-//
-//		/// <summary>
-//		/// Gets the WelcomeTitle property.
-//		/// Changes to that property's value raise the PropertyChanged event. 
-//		/// </summary>
-//		public string WelcomeTitle {
-//			get {
-//				return _welcomeTitle;
-//			}
-//
-//			set {
-//				if(_welcomeTitle == value) {
-//					return;
-//				}
-//
-//				_welcomeTitle = value;
-//				RaisePropertyChanged(WelcomeTitlePropertyName);
-//			}
-//		}
+		//		/// <summary>
+		//		/// The <see cref="WelcomeTitle" /> property's name.
+		//		/// </summary>
+		//		public const string WelcomeTitlePropertyName = "WelcomeTitle";
+		//
+		//		private string _welcomeTitle = string.Empty;
+		//
+		//		/// <summary>
+		//		/// Gets the WelcomeTitle property.
+		//		/// Changes to that property's value raise the PropertyChanged event. 
+		//		/// </summary>
+		//		public string WelcomeTitle {
+		//			get {
+		//				return _welcomeTitle;
+		//			}
+		//
+		//			set {
+		//				if(_welcomeTitle == value) {
+		//					return;
+		//				}
+		//
+		//				_welcomeTitle = value;
+		//				RaisePropertyChanged(WelcomeTitlePropertyName);
+		//			}
+		//		}
 
 		private bool CanImport() {
 			return DeserializeButtonActive;
@@ -98,15 +116,15 @@ namespace innlevering2.ViewModel {
 
 		private void Export() {
 
-			if(EnemyList.ListOfEnemies.Count <= 0) {
-//				SetInfoText("Nothing to export!");
+			if(StatsObjectList.Count <= 0) {
+				//				SetInfoText("Nothing to export!");
 				return;
 			}
 
 			using(var writer = new StreamWriter(Path)) {
-				writer.Write((EnemyList.Serialize()));
+				writer.Write((statsObjectList.Serialize()));
 			}
-//			SetInfoText("All data exported");
+			//			SetInfoText("All data exported");
 		}
 
 		private void Import() {
@@ -117,10 +135,11 @@ namespace innlevering2.ViewModel {
 			var jsonStream = new StreamReader(Path);
 			var jsonString = jsonStream.ReadToEnd();
 
-			EnemyList.Deserialize(jsonString);
+			statsObjectList.Deserialize(jsonString);
 
 			jsonStream.Close();
-//			SetInfoText("All data imported");
+			RaisePropertyChanged("EnemyList");
+			//			SetInfoText("All data imported");
 		}
 
 		private void ChangePath() {
@@ -135,15 +154,15 @@ namespace innlevering2.ViewModel {
 			var jsonString = jsonStream.ReadToEnd();
 
 			try {
-				var tempList = new EnemyList { ListOfEnemies = new List<Enemy>() };
+				var tempList = new StatsObjectList { ListOfEnemies = new List<StatsObject>() };
 				tempList.Deserialize(jsonString);
 
-//				SetInfoText("File has right format and has deserialized successfully!");
+				//				SetInfoText("File has right format and has deserialized successfully!");
 				DeserializeButtonActive = true;
 
 			} catch(Exception) {
 				DeserializeButtonActive = false;
-//				SetInfoText("Warning! Json file has wrong format.");
+				//				SetInfoText("Warning! Json file has wrong format.");
 			}
 
 			jsonStream.Close();
@@ -151,35 +170,35 @@ namespace innlevering2.ViewModel {
 			Path = dlg.FileName;
 		}
 
-//		private void SetInfoText(string infoText = "") {
-//			if(DeserializeButtonActive && !infoText.Equals("")) {
-//				//				Info.Text = infoText;
-//			} else if(DeserializeButtonActive && infoText.Equals("")) {
-//				//				Info.Text = "All systems GO!";
-//			} else {
-//				//				Info.Text = "Chosen file format is not supported, importing will be disabled.";
-//			}
-//		}
-//
-//
-//		private void EnterSerializeButton(object sender, System.Windows.Input.MouseEventArgs e) {
-//			if(EnemyList.ListOfEnemies.Count == 0) {
-//				SetInfoText("Nothing to export..");
-//			} else {
-//				SetInfoText("Serializes current data. Exporting to: " + Path);
-//
-//			}
-//		}
-//
-//		private void EnterPathButton(object sender, System.Windows.Input.MouseEventArgs e) {
-//			SetInfoText("Load another file. Current file: " + Path);
-//		}
-//		private void EnterDeserializeButton(object sender, System.Windows.Input.MouseEventArgs e) {
-//			SetInfoText("Deserializes current data. Importing from: " + Path);
-//		}
-//
-//		private void LeaveField(object sender, System.Windows.Input.MouseEventArgs e) {
-//			SetInfoText();
-//		}
+		//		private void SetInfoText(string infoText = "") {
+		//			if(DeserializeButtonActive && !infoText.Equals("")) {
+		//				//				Info.Text = infoText;
+		//			} else if(DeserializeButtonActive && infoText.Equals("")) {
+		//				//				Info.Text = "All systems GO!";
+		//			} else {
+		//				//				Info.Text = "Chosen file format is not supported, importing will be disabled.";
+		//			}
+		//		}
+		//
+		//
+		//		private void EnterSerializeButton(object sender, System.Windows.Input.MouseEventArgs e) {
+		//			if(EnemyList.ListOfEnemies.Count == 0) {
+		//				SetInfoText("Nothing to export..");
+		//			} else {
+		//				SetInfoText("Serializes current data. Exporting to: " + Path);
+		//
+		//			}
+		//		}
+		//
+		//		private void EnterPathButton(object sender, System.Windows.Input.MouseEventArgs e) {
+		//			SetInfoText("Load another file. Current file: " + Path);
+		//		}
+		//		private void EnterDeserializeButton(object sender, System.Windows.Input.MouseEventArgs e) {
+		//			SetInfoText("Deserializes current data. Importing from: " + Path);
+		//		}
+		//
+		//		private void LeaveField(object sender, System.Windows.Input.MouseEventArgs e) {
+		//			SetInfoText();
+		//		}
 	}
 }
