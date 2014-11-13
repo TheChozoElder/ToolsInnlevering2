@@ -90,8 +90,12 @@ public class StatsUpdater : MonoBehaviour
                         outputObject.RegenerateSpeed = (float)field.GetValue(health);
                         numberOfFoundFields++;
                         break;
+                    case "invincible":
+                        outputObject.Invincible = (bool)field.GetValue(health);
+                        numberOfFoundFields++;
+                        break;
                 }
-                if(numberOfFoundFields >= 3)
+                if(numberOfFoundFields >= 4)
                     break;
             }
         }
