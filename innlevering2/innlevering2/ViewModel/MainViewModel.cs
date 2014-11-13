@@ -20,22 +20,25 @@ namespace innlevering2.ViewModel {
 		#region Properties
 
 		public List<StatsObject> StatsObjectList {
-			get { return statsObjectList.ListOfEnemies; }
-			set
-			{
+			get {
+				return statsObjectList.ListOfEnemies;
+			}
+			set {
 				statsObjectList.ListOfEnemies = value;
 				RaisePropertyChanged();
-			} }
+			}
+		}
 
-		public int SelectedEnemy
+		public string SelectedObjectName = "SelectedObject";
+		public StatsObject SelectedObject
 		{
 			get
 			{
-				return selectedItem;
+				return selectedObject;
 			}
 			set
 			{
-				selectedItem = value;
+				selectedObject = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -65,7 +68,7 @@ namespace innlevering2.ViewModel {
 		private string Path { get; set; }
 		private bool DeserializeButtonActive { get; set; }
 		private StatsObjectList statsObjectList { get; set; }
-		private int selectedItem { get; set; }
+		private StatsObject selectedObject { get; set; }
 
 		#endregion
 

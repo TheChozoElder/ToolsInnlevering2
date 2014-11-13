@@ -4,83 +4,111 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.ignore.com"
+        xmlns:statsObject="clr-namespace:innlevering2.Model"
         mc:Ignorable="d ignore"
-        Height="500"
-        Width="700"
-        Title="MVVM Light Application"
+        Height="480"
+        Width="400"
+        Title="Stats editor"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <Window.Resources>
+        
         <ResourceDictionary>
+            
+            <DataTemplate x:Key="StatsObjectTemplate" DataType="statsObject:StatsObject">
+                <StackPanel>
+                    <TextBlock Text="Name: " />
+                    <TextBlock Text="{Binding Name}" />
+                    <TextBlock Text="Invicible: " />
+                    <CheckBox IsChecked="{Binding Invisible}" />
+                    <TextBlock Text="Max health: " />
+                    <TextBox Text="{Binding MaxHealth}" />
+                    <TextBlock Text="Movement speed: " />
+                    <TextBox Text="{Binding MovementSpeed}" />
+                    <TextBlock Text="Aiming speed: " />
+                    <TextBox Text="{Binding AimingSpeed}" />
+                    <TextBlock Text="Health regen speed: " />
+                    <TextBox Text="{Binding RegenerateSpeed}" />
+                    <TextBlock Text="Scale: " />
+                    <TextBox Text="{Binding Scale}" />
+                </StackPanel>
+            </DataTemplate>
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
+
+
     <Grid x:Name="LayoutRoot">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TabControl Margin="10,0,10,0" x:Name="MyTabControl">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="60"></RowDefinition>
-            <RowDefinition Height="40"></RowDefinition>
-        </Grid.RowDefinitions>
-        <TabControl Margin="10,0,10,0" x:Name="MyTabControl">
-            
-            <TabItem Header="Enemies">
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Border Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+                <TabItem Header="Enemies">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
 
-                        <ListView Margin="10" ItemsSource="{Binding StatsObjectList}" SelectedItem="{Binding SelectedEnemy}" >
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Width="140" Header="Name" DisplayMemberBinding="{Binding Name}"  />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        
-                    </Border>
+                            <ListView Margin="10" ItemsSource="{Binding StatsObjectList}" SelectedItem="{Binding SelectedObject}" >
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Width="100" Header="Property" DisplayMemberBinding="{Binding Name}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
 
-                    <Border Grid.Column="1" Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+                        </Border>
 
-                        <ListView Margin="10" ItemsSource="{Binding StatsObjectList}" >
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Width="100" Header="Property" DisplayMemberBinding="{Binding Invisible}"  />
-                                    <GridViewColumn Width="140" Header="Value" DisplayMemberBinding="{Binding RegenerateSpeed}"  />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <Border Grid.Column="1" Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+                            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                <WrapPanel Margin="10" Width="470">
+                                
+                                    <ContentControl Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
+                                
+                                </WrapPanel>
+                            </ScrollViewer>
+                            <!--                        <ListView Margin="10" ItemsSource="{Binding SelectedObject.Name}" >-->
+                            <!--                            <ListView.View>-->
+                            <!--                                <GridView>-->
+                            <!--                                    <GridViewColumn Width="100" Header="Property" DisplayMemberBinding="{Binding Name}"  />-->
+                            <!--                                </GridView>-->
+                            <!--                            </ListView.View>-->
+                            <!--                        </ListView>-->
 
-                    </Border>
+                        </Border>
 
-                </Grid>
-            </TabItem>
-            
-            <TabItem Header="Player">
-                <Grid Margin="10" >
-                    <TextBlock Text="Player stats / boss stats" />
-                    
-                </Grid>
-            </TabItem>
-            
-        </TabControl>
+                    </Grid>
+                </TabItem>
 
-        <WrapPanel Grid.Row="1" ToolBar.OverflowMode="Never" >
-            <Image x:Name="InfoIcon"  Margin="10" Source="../Assets/good.png" Height ="32" HorizontalAlignment="Left" ></Image>
-            <TextBlock x:Name="Info" Text="Informative message goes here" VerticalAlignment="Center"></TextBlock>
-        </WrapPanel>
+                <TabItem Header="Player">
+                    <Grid Margin="10" >
+                        <TextBlock Text="Player stats / boss stats" />
 
-        <Button Content="Export to Json" Command="{Binding ExportCommand}" Grid.Row="2" Width="260" HorizontalAlignment="Left" Margin="10,0,0,10"/>
-        <Button Content="Change filepath" Command="{Binding FilePathCommand}" Grid.Row="2" Width="100" Margin="0,0,0,15"/>
-        <Button Content="Import from Json" ToolTip="WLØ!!" Command="{Binding ImportCommand}" Grid.Row="2" Width="260" HorizontalAlignment="Right" Margin="0,0,10,10"/>
+                    </Grid>
+                </TabItem>
 
-    </Grid>
+            </TabControl>
+
+            <WrapPanel Grid.Row="1" ToolBar.OverflowMode="Never" >
+                <Image x:Name="InfoIcon"  Margin="10" Source="../Assets/good.png" Height ="32" HorizontalAlignment="Left" ></Image>
+                <TextBlock x:Name="Info" Text="Informative message goes here" VerticalAlignment="Center"></TextBlock>
+            </WrapPanel>
+
+            <Button Content="Export to Json" Command="{Binding ExportCommand}" Grid.Row="2" Width="100" HorizontalAlignment="Left" Margin="10,0,0,10"/>
+            <Button Content="Change filepath" Command="{Binding FilePathCommand}" Grid.Row="2" Width="100" Margin="0,0,0,15"/>
+            <Button Content="Import from Json" ToolTip="!" Command="{Binding ImportCommand}" Grid.Row="2" Width="100" HorizontalAlignment="Right" Margin="0,0,10,10"/>
+
+        </Grid>
 </Window>
