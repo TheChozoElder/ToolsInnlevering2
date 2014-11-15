@@ -19,15 +19,26 @@ namespace innlevering2.ViewModel {
 
 		#region Properties
 
-		public List<StatsObject> StatsObjectList {
+		public List<StatsObject> UnNamedEntities {
 			get {
-				return statsObjectList.ListOfEnemies;
+				return entities.UnnamedEntities;
 			}
 			set {
-				statsObjectList.ListOfEnemies = value;
+				entities.UnnamedEntities = value;
 				RaisePropertyChanged();
 			}
 		}
+		public List<StatsObject> NamedEntities {
+			get {
+				return entities.NamedEntities;
+			}
+			set {
+				entities.NamedEntities = value;
+				RaisePropertyChanged();
+			}
+		}
+
+
 
 		public string SelectedObjectName = "SelectedObject";
 		public StatsObject SelectedObject
@@ -38,6 +49,10 @@ namespace innlevering2.ViewModel {
 			}
 			set
 			{
+//				if (selectedObject == null || value == selectedObject) {
+//					return;
+//				}
+
 				selectedObject = value;
 				RaisePropertyChanged();
 			}
@@ -67,15 +82,19 @@ namespace innlevering2.ViewModel {
 
 		private string Path { get; set; }
 		private bool DeserializeButtonActive { get; set; }
-		private StatsObjectList statsObjectList { get; set; }
+		private StatsObjectList entities { get; set; }
 		private StatsObject selectedObject { get; set; }
 
 		#endregion
 
 		public MainViewModel() {
-			statsObjectList = new StatsObjectList { ListOfEnemies = new List<StatsObject>() };
+			entities = new StatsObjectList
+			{
+				UnnamedEntities = new List<StatsObject>(),
+				NamedEntities = new List<StatsObject>()
+			};
 			DeserializeButtonActive = true;
-			Path = @"E:\sak\file.json";
+			Path = @"E:\sak\funk.json";
 
 			Import();
 			CreateCommands();
@@ -119,29 +138,28 @@ namespace innlevering2.ViewModel {
 
 		private void Export() {
 
-			if(StatsObjectList.Count <= 0) {
+			if(UnNamedEntities.Count <= 0) {
 				//				SetInfoText("Nothing to export!");
 				return;
 			}
 
 			using(var writer = new StreamWriter(Path)) {
-				writer.Write((statsObjectList.Serialize()));
+				writer.Write((entities.Serialize()));
 			}
 			//			SetInfoText("All data exported");
 		}
 
 		private void Import() {
-			//TODO: Fix disable button instead
 			if(!DeserializeButtonActive)
 				return;
 
 			var jsonStream = new StreamReader(Path);
 			var jsonString = jsonStream.ReadToEnd();
 
-			statsObjectList.Deserialize(jsonString);
+			entities.Deserialize(jsonString);
 
 			jsonStream.Close();
-			RaisePropertyChanged("EnemyList");
+			RaisePropertyChanged("StatsObjectList");
 			//			SetInfoText("All data imported");
 		}
 
@@ -157,7 +175,7 @@ namespace innlevering2.ViewModel {
 			var jsonString = jsonStream.ReadToEnd();
 
 			try {
-				var tempList = new StatsObjectList { ListOfEnemies = new List<StatsObject>() };
+				var tempList = new StatsObjectList { UnnamedEntities = new List<StatsObject>() };
 				tempList.Deserialize(jsonString);
 
 				//				SetInfoText("File has right format and has deserialized successfully!");

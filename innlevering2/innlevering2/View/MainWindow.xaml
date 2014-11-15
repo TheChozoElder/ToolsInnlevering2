@@ -7,7 +7,7 @@
         xmlns:statsObject="clr-namespace:innlevering2.Model"
         mc:Ignorable="d ignore"
         Height="480"
-        Width="400"
+        Width="450"
         Title="Stats editor"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -16,22 +16,53 @@
         <ResourceDictionary>
             
             <DataTemplate x:Key="StatsObjectTemplate" DataType="statsObject:StatsObject">
-                <StackPanel>
-                    <TextBlock Text="Name: " />
-                    <TextBlock Text="{Binding Name}" />
-                    <TextBlock Text="Invicible: " />
-                    <CheckBox IsChecked="{Binding Invisible}" />
-                    <TextBlock Text="Max health: " />
-                    <TextBox Text="{Binding MaxHealth}" />
-                    <TextBlock Text="Movement speed: " />
-                    <TextBox Text="{Binding MovementSpeed}" />
-                    <TextBlock Text="Aiming speed: " />
-                    <TextBox Text="{Binding AimingSpeed}" />
-                    <TextBlock Text="Health regen speed: " />
-                    <TextBox Text="{Binding RegenerateSpeed}" />
-                    <TextBlock Text="Scale: " />
-                    <TextBox Text="{Binding Scale}" />
-                </StackPanel>
+                <TreeView>
+                    <TreeViewItem Header="{Binding Name}">
+                        <TreeViewItem Header="Health related">
+                            <StackPanel>
+                                <TextBlock Text="Max health"/>
+                                <TextBox Text="{Binding MaxHealth}" Width="Auto"/>
+                                <TextBlock Text="Health"/>
+                                <TextBox Text="{Binding Health}" Width="Auto"/>
+                                <TextBlock Text="Is invincible" />
+                                <CheckBox IsChecked="{Binding Invincible}" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </TreeViewItem>
+                        <TreeViewItem Header="Scale">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="X" Width="10"  />
+                                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ScaleX}" Width="30" />
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Y" Width="10" />
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ScaleY}" Width="30" />
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Z" Width="10" />
+                                <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding ScaleZ}" Width="30" />
+
+                            </Grid>
+                        </TreeViewItem>
+                        <TreeViewItem Header="Speed related">
+                            <StackPanel>
+                                <TextBlock Text="Movement speed"/>
+                                <TextBox Text="{Binding MovementSpeed}" Width="Auto"/>
+                                <TextBlock Text="Aiming speed"/>
+                                <TextBox Text="{Binding AimingSpeed}" Width="Auto"/>
+                                <TextBlock Text="Health regenerate speed"/>
+                                <TextBox Text="{Binding RegenerateSpeed}" Width="Auto"/>
+                                <TextBlock Text="Turningspeed"/>
+                                <TextBox Text="{Binding TurningSpeed}" Width="Auto"/>
+                            </StackPanel>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeView>
             </DataTemplate>
             
             <ResourceDictionary.MergedDictionaries>
@@ -61,7 +92,7 @@
                         </Grid.ColumnDefinitions>
                         <Border Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
 
-                            <ListView Margin="10" ItemsSource="{Binding StatsObjectList}" SelectedItem="{Binding SelectedObject}" >
+                            <ListView Margin="10" ItemsSource="{Binding UnNamedEntities}" SelectedItem="{Binding SelectedObject}" >
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Width="100" Header="Property" DisplayMemberBinding="{Binding Name}" />
@@ -73,31 +104,48 @@
 
                         <Border Grid.Column="1" Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
                             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                                <WrapPanel Margin="10" Width="470">
-                                
-                                    <ContentControl Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
-                                
-                                </WrapPanel>
+
+                                    <ContentControl Margin="10" Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
+
                             </ScrollViewer>
-                            <!--                        <ListView Margin="10" ItemsSource="{Binding SelectedObject.Name}" >-->
-                            <!--                            <ListView.View>-->
-                            <!--                                <GridView>-->
-                            <!--                                    <GridViewColumn Width="100" Header="Property" DisplayMemberBinding="{Binding Name}"  />-->
-                            <!--                                </GridView>-->
-                            <!--                            </ListView.View>-->
-                            <!--                        </ListView>-->
-
                         </Border>
-
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="Player">
-                    <Grid Margin="10" >
-                        <TextBlock Text="Player stats / boss stats" />
+                <TabItem Header="Player / Bosses">
 
-                    </Grid>
-                </TabItem>
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+
+                        <ListView Margin="10" ItemsSource="{Binding NamedEntities}" SelectedItem="{Binding SelectedObject}" >
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Width="100" Header="Property" DisplayMemberBinding="{Binding Name}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                    </Border>
+
+                    <Border Grid.Column="1" Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+
+                            <ContentControl Margin="10" Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
+
+                        </ScrollViewer>
+
+                    </Border>
+
+                </Grid>
+
+            </TabItem>
 
             </TabControl>
 

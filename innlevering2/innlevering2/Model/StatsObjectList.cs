@@ -20,9 +20,6 @@ namespace innlevering2.Model
 			//settings.Xxx = ...;
 			//settings.Converters.Add(new Xxx());
 
-			//TODO: Remove this when you're done DEBUGGING!!
-			//PrintList();
-
 			// Convert object to json string.
 			return JsonConvert.SerializeObject(this, Formatting.Indented, settings);
 		}
@@ -32,25 +29,10 @@ namespace innlevering2.Model
 		/// </summary>
 		public void Deserialize(string jsonData)
 		{
-			StatsObjectList sOL = JsonConvert.DeserializeObject<StatsObjectList>(jsonData);
+			var sOL = JsonConvert.DeserializeObject<StatsObjectList>(jsonData);
 		    this.NamedEntities = sOL.NamedEntities;
-		    this.UnamedEntities = sOL.UnamedEntities;
-
-		    //TODO: Remove this when you're done DEBUGGING!!
-		    //PrintList();
+			this.UnnamedEntities = sOL.UnnamedEntities;
 		}
-
-		/// <summary>
-		/// Writes all names of current enemies in list
-		/// </summary>
-		/*private void PrintList()
-		{
-			foreach (var enemies in ListOfEnemies)
-			{
-				Console.WriteLine(enemies.Name);
-			}
-		}*/
-
 	}
 
 }
