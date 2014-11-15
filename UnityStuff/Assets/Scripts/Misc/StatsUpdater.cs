@@ -19,11 +19,16 @@ public class StatsUpdater : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-	    FillGameObjectsList();
+	    this.FillGameObjectsList();
 
 	    foreach (GameObject gameObject in relevantGameObjects)
 	    {
-	        StatsObject newStatsObject = new StatsObject { Name = gameObject.name, Scale = gameObject.transform.localScale};
+	        StatsObject newStatsObject = new StatsObject {
+	            Name = gameObject.name, 
+                ScaleX = gameObject.transform.localScale.x,
+                ScaleY = gameObject.transform.localScale.y,
+                ScaleZ = gameObject.transform.localScale.z
+	        };
 	        SetHealthVariables(gameObject, newStatsObject);
 	        SetSpeedVariables(gameObject, newStatsObject);
 
