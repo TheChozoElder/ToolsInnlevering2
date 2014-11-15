@@ -1,56 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
 using innlevering2.Model;
-
 using Newtonsoft.Json;
 using UnityEngine;
 using System.Reflection;
 
 public class StatsUpdaterLogic : MonoBehaviour
 {
-    private const string FileName = @"Assets\Scripts\Misc\stats.json";
+    private const string FileName = @"Assets\Scripts\StatsUpdater\stats.json";
     private const string EnemyParentComponent = "Enemies";
 
     private List<GameObject> relevantGameObjects = new List<GameObject>();
     private List<string> relevantGameObjectsNames = new List<string>();
 
     private StatsObjectList stats = new StatsObjectList
-                                        {
-                                            UnnamedEntities = new List<StatsObject>(),
-                                            NamedEntities = new List<StatsObject>()
-                                        };
+    {
+        UnnamedEntities = new List<StatsObject>(),
+        NamedEntities = new List<StatsObject>()
+    };
 
-	// Use this for initialization
-	void Start ()
-	{
-	    this.FillGameObjectsList();
-
-	    foreach (GameObject gameObject in relevantGameObjects)
-	    {
-	        StatsObject newStatsObject = new StatsObject {
-	            Name = gameObject.name, 
-                ScaleX = gameObject.transform.localScale.x,
-                ScaleY = gameObject.transform.localScale.y,
-                ScaleZ = gameObject.transform.localScale.z
-	        };
-	        SetHealthVariables(gameObject, newStatsObject);
-	        SetSpeedVariables(gameObject, newStatsObject);
-
-	        int firstOccurenceOfName = relevantGameObjectsNames.IndexOf(gameObject.name);
-	        if (relevantGameObjectsNames.IndexOf(gameObject.name, firstOccurenceOfName+1) >= 0)
-	        {
-	            stats.UnnamedEntities.Add(newStatsObject);
-	        }
-	        else
-	        {
-	            stats.NamedEntities.Add(newStatsObject);
-	        }
-	    }
-
-        Export();
-	}
+    // Use this for initialization
+    void Start()
+    { }
 
     private void FillGameObjectsList()
     {
@@ -71,7 +43,7 @@ public class StatsUpdaterLogic : MonoBehaviour
                 relevantGameObjects.Add(possiblyRelevantObject.gameObject);
                 relevantGameObjectsNames.Add(possiblyRelevantObject.gameObject.name);
             }
-            else if(possiblyRelevantObject.childCount > 0)
+            else if (possiblyRelevantObject.childCount > 0)
             {
                 CheckForHealthScriptInChildren(possiblyRelevantObject);
             }
@@ -139,24 +111,37 @@ public class StatsUpdaterLogic : MonoBehaviour
             }
         }
     }
-    private void Export()
-    {
 
-        if (stats == null)
+    public void ExportStats()
+    {
+        this.FillGameObjectsList();
+
+        foreach (GameObject gameObject in relevantGameObjects)
         {
-            //				SetInfoText("Nothing to export!");
-            return;
+            StatsObject newStatsObject = new StatsObject
+            {
+                Name = gameObject.name,
+                ScaleX = gameObject.transform.localScale.x,
+                ScaleY = gameObject.transform.localScale.y,
+                ScaleZ = gameObject.transform.localScale.z
+            };
+            SetHealthVariables(gameObject, newStatsObject);
+            SetSpeedVariables(gameObject, newStatsObject);
+
+            int firstOccurenceOfName = relevantGameObjectsNames.IndexOf(gameObject.name);
+            if (relevantGameObjectsNames.IndexOf(gameObject.name, firstOccurenceOfName + 1) >= 0)
+            {
+                stats.UnnamedEntities.Add(newStatsObject);
+            }
+            else
+            {
+                stats.NamedEntities.Add(newStatsObject);
+            }
         }
 
         using (var writer = new StreamWriter(FileName))
         {
             writer.Write((stats.Serialize()));
         }
-        //			SetInfoText("All data exported");
     }
-
-    // Update is called once per frame
-	void Update () {
-	
-	}
 }
