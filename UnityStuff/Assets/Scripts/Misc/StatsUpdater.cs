@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
+using innlevering2.Model;
+
 using Newtonsoft.Json;
 using UnityEngine;
 using System.Reflection;
@@ -13,8 +16,11 @@ public class StatsUpdater : MonoBehaviour
     private List<GameObject> relevantGameObjects = new List<GameObject>();
     private List<string> relevantGameObjectsNames = new List<string>();
 
-    private List<StatsObject> namedEntities = new List<StatsObject>();
-    private List<StatsObject> unnamedEntities = new List<StatsObject>();
+    private StatsObjectList stats = new StatsObjectList
+                                        {
+                                            UnnamedEntities = new List<StatsObject>(),
+                                            NamedEntities = new List<StatsObject>()
+                                        };
 
 	// Use this for initialization
 	void Start ()
@@ -35,13 +41,15 @@ public class StatsUpdater : MonoBehaviour
 	        int firstOccurenceOfName = relevantGameObjectsNames.IndexOf(gameObject.name);
 	        if (relevantGameObjectsNames.IndexOf(gameObject.name, firstOccurenceOfName+1) >= 0)
 	        {
-	            unnamedEntities.Add(newStatsObject);
+	            stats.UnnamedEntities.Add(newStatsObject);
 	        }
 	        else
 	        {
-	            namedEntities.Add(newStatsObject);
+	            stats.NamedEntities.Add(newStatsObject);
 	        }
 	    }
+
+        Export();
 	}
 
     private void FillGameObjectsList()
@@ -130,6 +138,21 @@ public class StatsUpdater : MonoBehaviour
                 }
             }
         }
+    }
+    private void Export()
+    {
+
+        if (stats == null)
+        {
+            //				SetInfoText("Nothing to export!");
+            return;
+        }
+
+        using (var writer = new StreamWriter(FileName))
+        {
+            writer.Write((stats.Serialize()));
+        }
+        //			SetInfoText("All data exported");
     }
 
     // Update is called once per frame

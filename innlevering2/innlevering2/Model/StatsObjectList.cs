@@ -7,7 +7,8 @@ namespace innlevering2.Model
 	public class StatsObjectList
 	{
 		//[JsonProperty("Enemy")]
-		public List<StatsObject> ListOfEnemies { get; set; }
+        public List<StatsObject> NamedEntities { get; set; }
+        public List<StatsObject> UnnamedEntities { get; set; }
 
 		/// <summary>
 		/// Serializes current enemylist to file
@@ -20,10 +21,10 @@ namespace innlevering2.Model
 			//settings.Converters.Add(new Xxx());
 
 			//TODO: Remove this when you're done DEBUGGING!!
-			PrintList();
+			//PrintList();
 
 			// Convert object to json string.
-			return JsonConvert.SerializeObject(ListOfEnemies, Formatting.Indented, settings);
+			return JsonConvert.SerializeObject(this, Formatting.Indented, settings);
 		}
 
 		/// <summary>
@@ -31,22 +32,24 @@ namespace innlevering2.Model
 		/// </summary>
 		public void Deserialize(string jsonData)
 		{
-			ListOfEnemies = JsonConvert.DeserializeObject<List<StatsObject>>(jsonData);
+			StatsObjectList sOL = JsonConvert.DeserializeObject<StatsObjectList>(jsonData);
+		    this.NamedEntities = sOL.NamedEntities;
+		    this.UnamedEntities = sOL.UnamedEntities;
 
-			//TODO: Remove this when you're done DEBUGGING!!
-			PrintList();
+		    //TODO: Remove this when you're done DEBUGGING!!
+		    //PrintList();
 		}
 
 		/// <summary>
 		/// Writes all names of current enemies in list
 		/// </summary>
-		private void PrintList()
+		/*private void PrintList()
 		{
 			foreach (var enemies in ListOfEnemies)
 			{
 				Console.WriteLine(enemies.Name);
 			}
-		}
+		}*/
 
 	}
 
