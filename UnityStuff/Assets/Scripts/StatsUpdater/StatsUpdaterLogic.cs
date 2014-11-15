@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using System.Reflection;
 
-public class StatsUpdater : MonoBehaviour
+public class StatsUpdaterLogic : MonoBehaviour
 {
     private const string FileName = @"Assets\Scripts\Misc\stats.json";
     private const string EnemyParentComponent = "Enemies";
