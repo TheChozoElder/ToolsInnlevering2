@@ -137,6 +137,8 @@ namespace innlevering2.ViewModel {
 		private void Export() {
 
 			if(!canDeserialize) {
+				InfoPicturePath = "../Assets/mark.png";
+				InfoText = "Cannot export, please change file..";
 				return;
 			}
 
@@ -154,6 +156,9 @@ namespace innlevering2.ViewModel {
 		private void Import()
 		{
 			if (path == null || !canDeserialize) {
+
+				InfoPicturePath = "../Assets/mark.png";
+				InfoText = "Cannot import, please change file..";
 				return;
 			}
 
