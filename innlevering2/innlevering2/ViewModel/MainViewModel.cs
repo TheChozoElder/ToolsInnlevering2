@@ -56,14 +56,26 @@ namespace innlevering2.ViewModel {
 			}
 		}
 
-		public string DeserializeButtonActiveName = "DeserializeButtonActive";
-		public bool DeserializeButtonActive {
+		public string InfoTextName = "InfoText";
+		public string InfoText {
 			get {
-				return deserializeButtonActive;
+				return infoText;
 			}
 			set {
 
-				deserializeButtonActive = value;
+				infoText = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public string InfoPicturePathName = "InfoPicturePath";
+		public string InfoPicturePath {
+			get {
+				return infoPicturePath;
+			}
+			set {
+
+				infoPicturePath = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -90,9 +102,10 @@ namespace innlevering2.ViewModel {
 
 		#region Private fields
 
-		private string Path { get; set; }
+		private string path { get; set; }
+		private string infoText { get; set; }
+		private string infoPicturePath { get; set; }
 
-		private bool deserializeButtonActive { get; set; }
 		private StatsObjectList entities { get; set; }
 		private StatsObject selectedObject { get; set; }
 
@@ -105,7 +118,9 @@ namespace innlevering2.ViewModel {
 				NamedEntities = new List<StatsObject>()
 			};
 
-			Path = "";
+			path = "";
+			InfoPicturePath = "../Assets/mark.png";
+			InfoText = "Choose input file.";
 
 			CreateCommands();
 		}
@@ -113,12 +128,9 @@ namespace innlevering2.ViewModel {
 		private void CreateCommands() {
 			ExportCommand = new RelayCommand(Export);
 			FilePathCommand = new RelayCommand(ChangePath);
-			ImportCommand = new RelayCommand(Import, CanImport);
+			ImportCommand = new RelayCommand(Import);
 		}
 
-		private bool CanImport() {
-			return !deserializeButtonActive;
-		}
 
 		private void Export() {
 
@@ -126,14 +138,17 @@ namespace innlevering2.ViewModel {
 				return;
 			}
 
-			using(var writer = new StreamWriter(Path)) {
+			using(var writer = new StreamWriter(path)) {
 				writer.Write((entities.Serialize()));
 			}
+			InfoText = "Exported to: " + path ;
+			InfoPicturePath = "../Assets/save.png";
+
 		}
 
 		private void Import() {
 
-			var jsonStream = new StreamReader(Path);
+			var jsonStream = new StreamReader(path);
 			var jsonString = jsonStream.ReadToEnd();
 
 			entities.Deserialize(jsonString);
@@ -141,6 +156,9 @@ namespace innlevering2.ViewModel {
 			jsonStream.Close();
 			RaisePropertyChanged("UnNamedEntities");
 			RaisePropertyChanged("NamedEntities");
+
+			InfoText = "Objects imported.";
+			InfoPicturePath = "../Assets/good.png";
 
 			SelectedObject = entities.UnnamedEntities[0];
 
@@ -161,19 +179,16 @@ namespace innlevering2.ViewModel {
 				var tempList = new StatsObjectList { UnnamedEntities = new List<StatsObject>() };
 				tempList.Deserialize(jsonString);
 
-				DeserializeButtonActive = true;
+				jsonStream.Close();
+				path = dlg.FileName;
+				Import();
+
 
 			} catch(Exception) {
-				DeserializeButtonActive = false;
+				InfoText = "Something went wrong. Please choose a valid json file";
+				InfoPicturePath = "../Assets/error.png";
 
 			}
-			RaisePropertyChanged("DeserializeButtonActive");
-
-			jsonStream.Close();
-			Path = dlg.FileName;
-			Import();
-
-			Path = dlg.FileName;
 
 		}
 	}
