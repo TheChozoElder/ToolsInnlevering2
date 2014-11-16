@@ -16,53 +16,46 @@
         <ResourceDictionary>
             
             <DataTemplate x:Key="StatsObjectTemplate" DataType="statsObject:StatsObject">
-                <TreeView>
-                    <TreeViewItem Header="{Binding Name}">
-                        <TreeViewItem Header="Health related">
-                            <StackPanel>
-                                <TextBlock Text="Max health"/>
-                                <TextBox Text="{Binding MaxHealth}" Width="Auto"/>
-                                <TextBlock Text="Health"/>
-                                <TextBox Text="{Binding Health}" Width="Auto"/>
-                                <TextBlock Text="Is invincible" />
-                                <CheckBox IsChecked="{Binding Invincible}" HorizontalAlignment="Center" />
-                            </StackPanel>
-                        </TreeViewItem>
-                        <TreeViewItem Header="Scale">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                    <RowDefinition Height="Auto"></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
+                    <StackPanel>
+                    <TextBlock Text="ID"/>
+                    <TextBlock Text="{Binding Name}"/>
+                    <TextBlock Text="Max health"/>
+                        <TextBox Text="{Binding MaxHealth}" Width="Auto"/>
+                        <TextBlock Text="Health"/>
+                        <TextBox Text="{Binding Health}" Width="Auto"/>
+                        <TextBlock Text="Is invincible" />
+                        <CheckBox IsChecked="{Binding Invincible}" /> 
+                        <TextBlock Text="Movement speed"/>
+                        <TextBox Text="{Binding MovementSpeed}" Width="Auto"/>
+                        <TextBlock Text="Aiming speed"/>
+                        <TextBox Text="{Binding AimingSpeed}" Width="Auto"/>
+                        <TextBlock Text="Health regenerate speed"/>
+                        <TextBox Text="{Binding RegenerateSpeed}" Width="Auto"/>
+                        <TextBlock Text="Turningspeed"/>
+                        <TextBox Text="{Binding TurningSpeed}" Width="Auto"/>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="X" Width="10"  />
-                                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ScaleX}" Width="30" />
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Y" Width="10" />
-                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ScaleY}" Width="30" />
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Z" Width="10" />
-                                <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding ScaleZ}" Width="30" />
+                    <TextBlock Text="Scale"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
 
-                            </Grid>
-                        </TreeViewItem>
-                        <TreeViewItem Header="Speed related">
-                            <StackPanel>
-                                <TextBlock Text="Movement speed"/>
-                                <TextBox Text="{Binding MovementSpeed}" Width="Auto"/>
-                                <TextBlock Text="Aiming speed"/>
-                                <TextBox Text="{Binding AimingSpeed}" Width="Auto"/>
-                                <TextBlock Text="Health regenerate speed"/>
-                                <TextBox Text="{Binding RegenerateSpeed}" Width="Auto"/>
-                                <TextBlock Text="Turningspeed"/>
-                                <TextBox Text="{Binding TurningSpeed}" Width="Auto"/>
-                            </StackPanel>
-                        </TreeViewItem>
-                    </TreeViewItem>
-                </TreeView>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="X" Width="10"  />
+                        <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ScaleX}" Width="30" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="Y" Width="10" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ScaleY}" Width="30" />
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="Z" Width="10" />
+                        <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding ScaleZ}" Width="30" />
+
+                    </Grid>
+                </StackPanel>
+                    
             </DataTemplate>
             
             <ResourceDictionary.MergedDictionaries>
@@ -76,7 +69,6 @@
     <Grid x:Name="LayoutRoot">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
             </Grid.RowDefinitions>
             <TabControl Margin="10,0,10,0" x:Name="MyTabControl">
@@ -140,23 +132,15 @@
                             <ContentControl Margin="10" Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
 
                         </ScrollViewer>
-
                     </Border>
-
                 </Grid>
-
             </TabItem>
 
             </TabControl>
 
-            <WrapPanel Grid.Row="1" ToolBar.OverflowMode="Never" >
-                <Image x:Name="InfoIcon"  Margin="10" Source="../Assets/good.png" Height ="32" HorizontalAlignment="Left" ></Image>
-                <TextBlock x:Name="Info" Text="Informative message goes here" VerticalAlignment="Center"></TextBlock>
-            </WrapPanel>
-
-            <Button Content="Export to Json" Command="{Binding ExportCommand}" Grid.Row="2" Width="100" HorizontalAlignment="Left" Margin="10,0,0,10"/>
-            <Button Content="Change filepath" Command="{Binding FilePathCommand}" Grid.Row="2" Width="100" Margin="0,0,0,15"/>
-            <Button Content="Import from Json" ToolTip="!" Command="{Binding ImportCommand}" Grid.Row="2" Width="100" HorizontalAlignment="Right" Margin="0,0,10,10"/>
+            <Button Content="Export to Json" Command="{Binding ExportCommand}" Grid.Row="1" Width="100" HorizontalAlignment="Left" Margin="10,0,0,10"/>
+            <Button Content="Change filepath" Command="{Binding FilePathCommand}" Grid.Row="1" Width="100" Margin="0,0,0,15"/>
+            <Button Content="Import from Json" Command="{Binding ImportCommand}" Grid.Row="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,10"/>
 
         </Grid>
 </Window>

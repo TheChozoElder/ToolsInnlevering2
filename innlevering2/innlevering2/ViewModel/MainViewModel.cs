@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -18,6 +20,7 @@ namespace innlevering2.ViewModel {
 	public class MainViewModel : ViewModelBase {
 
 		#region Properties
+		public string UnNamedEntitiesName = "UnNamedEntities";
 
 		public List<StatsObject> UnNamedEntities {
 			get {
@@ -25,20 +28,18 @@ namespace innlevering2.ViewModel {
 			}
 			set {
 				entities.UnnamedEntities = value;
-				RaisePropertyChanged();
 			}
 		}
+
+		public string NamedEntitiesName = "NamedEntities";
 		public List<StatsObject> NamedEntities {
 			get {
 				return entities.NamedEntities;
 			}
 			set {
 				entities.NamedEntities = value;
-				RaisePropertyChanged();
 			}
 		}
-
-
 
 		public string SelectedObjectName = "SelectedObject";
 		public StatsObject SelectedObject
@@ -49,11 +50,20 @@ namespace innlevering2.ViewModel {
 			}
 			set
 			{
-//				if (selectedObject == null || value == selectedObject) {
-//					return;
-//				}
 
 				selectedObject = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public string DeserializeButtonActiveName = "DeserializeButtonActive";
+		public bool DeserializeButtonActive {
+			get {
+				return deserializeButtonActive;
+			}
+			set {
+
+				deserializeButtonActive = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -81,7 +91,8 @@ namespace innlevering2.ViewModel {
 		#region Private fields
 
 		private string Path { get; set; }
-		private bool DeserializeButtonActive { get; set; }
+
+		private bool deserializeButtonActive { get; set; }
 		private StatsObjectList entities { get; set; }
 		private StatsObject selectedObject { get; set; }
 
@@ -93,10 +104,9 @@ namespace innlevering2.ViewModel {
 				UnnamedEntities = new List<StatsObject>(),
 				NamedEntities = new List<StatsObject>()
 			};
-			DeserializeButtonActive = true;
-			Path = @"E:\sak\funk.json";
 
-			Import();
+			Path = "";
+
 			CreateCommands();
 		}
 
@@ -106,52 +116,22 @@ namespace innlevering2.ViewModel {
 			ImportCommand = new RelayCommand(Import, CanImport);
 		}
 
-		//		/// <summary>
-		//		/// The <see cref="WelcomeTitle" /> property's name.
-		//		/// </summary>
-		//		public const string WelcomeTitlePropertyName = "WelcomeTitle";
-		//
-		//		private string _welcomeTitle = string.Empty;
-		//
-		//		/// <summary>
-		//		/// Gets the WelcomeTitle property.
-		//		/// Changes to that property's value raise the PropertyChanged event. 
-		//		/// </summary>
-		//		public string WelcomeTitle {
-		//			get {
-		//				return _welcomeTitle;
-		//			}
-		//
-		//			set {
-		//				if(_welcomeTitle == value) {
-		//					return;
-		//				}
-		//
-		//				_welcomeTitle = value;
-		//				RaisePropertyChanged(WelcomeTitlePropertyName);
-		//			}
-		//		}
-
 		private bool CanImport() {
-			return DeserializeButtonActive;
+			return !deserializeButtonActive;
 		}
 
 		private void Export() {
 
 			if(UnNamedEntities.Count <= 0) {
-				//				SetInfoText("Nothing to export!");
 				return;
 			}
 
 			using(var writer = new StreamWriter(Path)) {
 				writer.Write((entities.Serialize()));
 			}
-			//			SetInfoText("All data exported");
 		}
 
 		private void Import() {
-			if(!DeserializeButtonActive)
-				return;
 
 			var jsonStream = new StreamReader(Path);
 			var jsonString = jsonStream.ReadToEnd();
@@ -159,8 +139,11 @@ namespace innlevering2.ViewModel {
 			entities.Deserialize(jsonString);
 
 			jsonStream.Close();
-			RaisePropertyChanged("StatsObjectList");
-			//			SetInfoText("All data imported");
+			RaisePropertyChanged("UnNamedEntities");
+			RaisePropertyChanged("NamedEntities");
+
+			SelectedObject = entities.UnnamedEntities[0];
+
 		}
 
 		private void ChangePath() {
@@ -178,48 +161,20 @@ namespace innlevering2.ViewModel {
 				var tempList = new StatsObjectList { UnnamedEntities = new List<StatsObject>() };
 				tempList.Deserialize(jsonString);
 
-				//				SetInfoText("File has right format and has deserialized successfully!");
 				DeserializeButtonActive = true;
 
 			} catch(Exception) {
 				DeserializeButtonActive = false;
-				//				SetInfoText("Warning! Json file has wrong format.");
+
 			}
+			RaisePropertyChanged("DeserializeButtonActive");
 
 			jsonStream.Close();
+			Path = dlg.FileName;
+			Import();
 
 			Path = dlg.FileName;
-		}
 
-		//		private void SetInfoText(string infoText = "") {
-		//			if(DeserializeButtonActive && !infoText.Equals("")) {
-		//				//				Info.Text = infoText;
-		//			} else if(DeserializeButtonActive && infoText.Equals("")) {
-		//				//				Info.Text = "All systems GO!";
-		//			} else {
-		//				//				Info.Text = "Chosen file format is not supported, importing will be disabled.";
-		//			}
-		//		}
-		//
-		//
-		//		private void EnterSerializeButton(object sender, System.Windows.Input.MouseEventArgs e) {
-		//			if(EnemyList.ListOfEnemies.Count == 0) {
-		//				SetInfoText("Nothing to export..");
-		//			} else {
-		//				SetInfoText("Serializes current data. Exporting to: " + Path);
-		//
-		//			}
-		//		}
-		//
-		//		private void EnterPathButton(object sender, System.Windows.Input.MouseEventArgs e) {
-		//			SetInfoText("Load another file. Current file: " + Path);
-		//		}
-		//		private void EnterDeserializeButton(object sender, System.Windows.Input.MouseEventArgs e) {
-		//			SetInfoText("Deserializes current data. Importing from: " + Path);
-		//		}
-		//
-		//		private void LeaveField(object sender, System.Windows.Input.MouseEventArgs e) {
-		//			SetInfoText();
-		//		}
+		}
 	}
 }
