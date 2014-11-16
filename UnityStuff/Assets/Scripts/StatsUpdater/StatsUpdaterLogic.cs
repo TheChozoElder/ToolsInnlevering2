@@ -107,7 +107,6 @@ public static class StatsUpdaterLogic
             }
             if (currentObjectIDIndex >= unityObjectIDs.Count)
                 break;
-            Debug.Log(unityObjects.Count);
             GameObject unityObject = unityObjects[currentObjectIDIndex];
 
             unityObject.transform.localScale = new Vector3(statsObject.ScaleX, statsObject.ScaleY, statsObject.ScaleZ);

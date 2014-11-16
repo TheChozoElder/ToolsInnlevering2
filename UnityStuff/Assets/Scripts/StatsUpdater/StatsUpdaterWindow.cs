@@ -1,7 +1,6 @@
 using System.IO;
-
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 public class StatsUpdaterWindow : EditorWindow
 {
     // Add menu named "My Window" to the Window menu
@@ -14,13 +13,14 @@ public class StatsUpdaterWindow : EditorWindow
 
     void OnGUI()
     { 
-        if (GUILayout.Button("Import"))
-        {
-            StatsUpdaterLogic.ImportStats();
-        }
-        else if (GUILayout.Button("Export"))
+        
+        if (GUILayout.Button("Export stats"))
         {
             StatsUpdaterLogic.ExportStats();
+        }
+        else if (GUILayout.Button("Import stats"))
+        {
+            StatsUpdaterLogic.ImportStats();
         }
         else if (GUILayout.Button("Change JSON file"))
         {
