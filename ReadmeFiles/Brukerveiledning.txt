@@ -1,0 +1,13 @@
+Brukerveiledning for innlevering 2
+
+Først må du inn i unity og åpne Stats updater (Window -> Stats Updater).
+Trykk 'Export stats' knappen, så exporterer den alle relevante spillobjekter til en json fil.
+
+Når du åpner Stats editor må du først velge inputfil ved å trykke 'Change filepath'.
+Da vil alle fiendene lastes inn i listen på venstre side.
+Du kan velge fra listen og klikke på en, så dukker infoen opp på høyre side.
+Endre på så mange spillobjekter du vil, og klikk 'Export to json' når du er fornøyd.
+Da serialiseres alt, og eksporteres til valgt fil.
+
+Åpne unity og klikk 'Import stats' knappen, da vil alle spillobjekter få sine verdier oppdatert.
+Dette funker live like godt som når spillet ikke kjører.

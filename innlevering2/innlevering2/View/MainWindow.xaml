@@ -7,24 +7,27 @@
         xmlns:statsObject="clr-namespace:innlevering2.Model"
         mc:Ignorable="d ignore"
         Height="480"
-        Width="450"
+        Width="390"
         Title="Stats editor"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-
     <Window.Resources>
-        
         <ResourceDictionary>
-            
             <DataTemplate x:Key="StatsObjectTemplate" DataType="statsObject:StatsObject">
                     <StackPanel>
-                    <TextBlock Text="ID"/>
-                    <TextBlock Text="{Binding Name}"/>
-                    <TextBlock Text="Max health"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="ID:"/>
+                            <TextBlock Grid.Column="1" Text="{Binding InstanceID}"/>
+                        </Grid>
+                        <TextBlock  Text="Is invincible" />
+                        <CheckBox IsChecked="{Binding Invincible}" />
+                        <TextBlock Text="Max health"/>
                         <TextBox Text="{Binding MaxHealth}" Width="Auto"/>
                         <TextBlock Text="Health"/>
                         <TextBox Text="{Binding Health}" Width="Auto"/>
-                        <TextBlock Text="Is invincible" />
-                        <CheckBox IsChecked="{Binding Invincible}" /> 
                         <TextBlock Text="Movement speed"/>
                         <TextBox Text="{Binding MovementSpeed}" Width="Auto"/>
                         <TextBlock Text="Aiming speed"/>
@@ -33,7 +36,6 @@
                         <TextBox Text="{Binding RegenerateSpeed}" Width="Auto"/>
                         <TextBlock Text="Turningspeed"/>
                         <TextBox Text="{Binding TurningSpeed}" Width="Auto"/>
-
                     <TextBlock Text="Scale"/>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -45,45 +47,36 @@
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="X" Width="10"  />
                         <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ScaleX}" Width="30" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Y" Width="10" />
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ScaleY}" Width="30" />
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="Z" Width="10" />
                         <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding ScaleZ}" Width="30" />
-
                     </Grid>
                 </StackPanel>
-                    
             </DataTemplate>
-            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
-
-
     <Grid x:Name="LayoutRoot">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
             </Grid.RowDefinitions>
             <TabControl Margin="10,0,10,0" x:Name="MyTabControl">
-
                 <TabItem Header="Enemies">
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Border Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
-
                             <ListView Margin="10" ItemsSource="{Binding UnNamedEntities}" SelectedItem="{Binding SelectedObject}" >
                                 <ListView.View>
                                     <GridView>
@@ -91,21 +84,15 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-
                         </Border>
-
                         <Border Grid.Column="1" Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
                             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-
-                                    <ContentControl Margin="10" Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
-
+                                <ContentControl Margin="10" Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
                             </ScrollViewer>
                         </Border>
                     </Grid>
                 </TabItem>
-
                 <TabItem Header="Player / Bosses">
-
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -115,7 +102,6 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Border Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
-
                         <ListView Margin="10" ItemsSource="{Binding NamedEntities}" SelectedItem="{Binding SelectedObject}" >
                             <ListView.View>
                                 <GridView>
@@ -123,24 +109,17 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-
                     </Border>
-
                     <Border Grid.Column="1" Background="#FFF4F4F5" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-
                             <ContentControl Margin="10" Content="{Binding SelectedObject}" ContentTemplate="{StaticResource StatsObjectTemplate}"/>
-
                         </ScrollViewer>
                     </Border>
                 </Grid>
             </TabItem>
-
-            </TabControl>
-
-            <Button Content="Export to Json" Command="{Binding ExportCommand}" Grid.Row="1" Width="100" HorizontalAlignment="Left" Margin="10,0,0,10"/>
-            <Button Content="Change filepath" Command="{Binding FilePathCommand}" Grid.Row="1" Width="100" Margin="0,0,0,15"/>
-            <Button Content="Import from Json" Command="{Binding ImportCommand}" Grid.Row="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,10"/>
-
-        </Grid>
+        </TabControl>
+        <Button Content="Export to Json" Command="{Binding ExportCommand}" Grid.Row="1" Width="100" HorizontalAlignment="Left" Margin="10,0,0,10"/>
+        <Button Content="Change filepath" Command="{Binding FilePathCommand}" Grid.Row="1" Width="100" Margin="0,0,0,15"/>
+        <Button Content="Import from Json" Command="{Binding ImportCommand}" Grid.Row="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,10"/>
+    </Grid>
 </Window>
