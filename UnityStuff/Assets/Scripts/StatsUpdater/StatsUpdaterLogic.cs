@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using innlevering2.Model;
@@ -8,51 +9,128 @@ using System.Reflection;
 
 public class StatsUpdaterLogic : MonoBehaviour
 {
-    private const string FileName = @"Assets\Scripts\StatsUpdater\stats.json";
     private const string EnemyParentComponent = "Enemies";
 
-    private List<GameObject> relevantGameObjects = new List<GameObject>();
-    private List<string> relevantGameObjectsNames = new List<string>();
-
-    private StatsObjectList stats = new StatsObjectList
+    #region Public Methods
+    public void ExportStats(string filePath)
     {
-        UnnamedEntities = new List<StatsObject>(),
-        NamedEntities = new List<StatsObject>()
-    };
+        List<GameObject> unityObjects = new List<GameObject>();
+        List<string> unityObjectNames = new List<string>();
 
-    // Use this for initialization
-    void Start()
-    { }
+        StatsObjectList statsObjects = new StatsObjectList
+        {
+            UnnamedEntities = new List<StatsObject>(),
+            NamedEntities = new List<StatsObject>()
+        };
 
-    private void FillGameObjectsList()
-    {
-        GameObject player = GameObject.Find("Player");
-        relevantGameObjects.Add(player);
-        relevantGameObjectsNames.Add(player.name);
+        GetGameObjectsFromUnity(unityObjects, unityObjectNames, null);
 
-        GameObject enemies = GameObject.Find(EnemyParentComponent);
-        CheckForHealthScriptInChildren(enemies.transform);
+        foreach (GameObject gameObject in unityObjects)
+        {
+            StatsObject newStatsObject = new StatsObject
+            {
+                InstanceID = gameObject.GetInstanceID(),
+                Name = gameObject.name,
+                ScaleX = gameObject.transform.localScale.x,
+                ScaleY = gameObject.transform.localScale.y,
+                ScaleZ = gameObject.transform.localScale.z,
+                TurningSpeed = -1,
+                AimingSpeed = -1
+            };
+            SetHealthVariables(gameObject, newStatsObject, false);
+            SetSpeedVariables(gameObject, newStatsObject, false);
+
+            int firstOccurenceOfName = unityObjectNames.IndexOf(gameObject.name);
+            if (unityObjectNames.IndexOf(gameObject.name, firstOccurenceOfName + 1) >= 0)
+            {
+                statsObjects.UnnamedEntities.Add(newStatsObject);
+            }
+            else
+            {
+                statsObjects.NamedEntities.Add(newStatsObject);
+            }
+        }
+
+        using (var writer = new StreamWriter(filePath))
+        {
+            writer.Write((statsObjects.Serialize()));
+        }
     }
 
-    private void CheckForHealthScriptInChildren(Transform enemies)
+    public void ImportStats(string filePath)
     {
-        foreach (Transform possiblyRelevantObject in enemies.transform)
+        var unityObjects = new List<GameObject>();
+        var unityObjectIDs = new List<int>();
+
+        var statsObjects = new StatsObjectList
+        {
+            UnnamedEntities = new List<StatsObject>(),
+            NamedEntities = new List<StatsObject>()
+        };
+
+        GetGameObjectsFromUnity(unityObjects, null, unityObjectIDs);
+
+        var jsonStream = new StreamReader(filePath);
+        var jsonString = jsonStream.ReadToEnd();
+        jsonStream.Close();
+
+        statsObjects.Deserialize(jsonString);
+
+        foreach (StatsObject statsObject in statsObjects)
+        {
+            int currentObjectID = 0;
+            int currentObjectIDIndex = -1;
+            while (currentObjectID != statsObject.InstanceID )
+            {
+                currentObjectIDIndex++;
+                currentObjectID = unityObjectIDs[currentObjectIDIndex];
+            }
+            Debug.Log(unityObjects.Count);
+            GameObject unityObject = unityObjects[currentObjectIDIndex];
+
+            unityObject.transform.localScale = new Vector3(statsObject.ScaleX, statsObject.ScaleY, statsObject.ScaleZ);
+            SetHealthVariables(unityObject, statsObject, true);
+            SetSpeedVariables(unityObject, statsObject, true);
+        }
+    }
+    #endregion
+
+    #region Private Methods
+    private void GetGameObjectsFromUnity(List<GameObject> listOfObjectsToFill, List<string> listOfNamesToFill, List<int> listOfIDsToFill)
+    {
+        GameObject player = GameObject.Find("Player");
+        listOfObjectsToFill.Add(player);
+        if(listOfNamesToFill != null)
+            listOfNamesToFill.Add(player.name);
+        if(listOfIDsToFill != null)
+            listOfIDsToFill.Add(player.GetInstanceID());
+
+        GameObject enemies = GameObject.Find(EnemyParentComponent);
+        GetChildrenWithHealthScript(enemies.transform, listOfObjectsToFill, listOfNamesToFill, listOfIDsToFill);
+    }
+
+    private void GetChildrenWithHealthScript(Transform parent, List<GameObject> listOfObjectsToFill, List<string> listOfNamesToFill, List<int> listOfIDsToFill)
+    {
+        foreach (Transform possiblyRelevantObject in parent.transform)
         {
             if (possiblyRelevantObject.GetComponent("Health") != null)
             {
-                relevantGameObjects.Add(possiblyRelevantObject.gameObject);
-                relevantGameObjectsNames.Add(possiblyRelevantObject.gameObject.name);
+                listOfObjectsToFill.Add(possiblyRelevantObject.gameObject);
+                if(listOfNamesToFill != null)
+                    listOfNamesToFill.Add(possiblyRelevantObject.gameObject.name);
+                if(listOfIDsToFill != null)
+                    listOfIDsToFill.Add(possiblyRelevantObject.gameObject.GetInstanceID());
             }
             else if (possiblyRelevantObject.childCount > 0)
             {
-                CheckForHealthScriptInChildren(possiblyRelevantObject);
+                GetChildrenWithHealthScript(possiblyRelevantObject, listOfObjectsToFill, listOfNamesToFill, listOfIDsToFill);
             }
         }
     }
 
-    private void SetHealthVariables(GameObject inputObject, StatsObject outputObject)
+    private void SetHealthVariables(GameObject unityObject, StatsObject statsObject, bool getFromFileAndSetInUnity)
     {
-        Component health = inputObject.GetComponent("Health");
+        Component health = unityObject.GetComponent("Health");
         if (health != null)
         {
             Type type = health.GetType();
@@ -62,31 +140,43 @@ public class StatsUpdaterLogic : MonoBehaviour
                 switch (field.Name)
                 {
                     case "maxHealth":
-                        outputObject.MaxHealth = (float)field.GetValue(health);
+                        if(getFromFileAndSetInUnity)
+                            field.SetValue(health, statsObject.MaxHealth);
+                        else
+                            statsObject.MaxHealth = (float)field.GetValue(health);
                         break;
                     case "health":
-                        outputObject.Health = (float)field.GetValue(health);
+                        if (getFromFileAndSetInUnity)
+                            field.SetValue(health, statsObject.Health);
+                        else
+                            statsObject.Health = (float)field.GetValue(health);
                         break;
                     case "regenerateSpeed":
-                        outputObject.RegenerateSpeed = (float)field.GetValue(health);
+                        if (getFromFileAndSetInUnity)
+                            field.SetValue(health, statsObject.RegenerateSpeed);
+                        else
+                            statsObject.RegenerateSpeed = (float)field.GetValue(health);
                         break;
                     case "invincible":
-                        outputObject.Invincible = (bool)field.GetValue(health);
+                        if (getFromFileAndSetInUnity)
+                            field.SetValue(health, statsObject.Invincible);
+                        else
+                            statsObject.Invincible = (bool)field.GetValue(health);
                         break;
                 }
             }
         }
     }
 
-    private void SetSpeedVariables(GameObject inputObject, StatsObject outputObject)
+    private void SetSpeedVariables(GameObject unityObject, StatsObject statsObject, bool getFromFileAndSetInUnity)
     {
-        Component speed = inputObject.GetComponent("FreeMovementMotor");
+        Component speed = unityObject.GetComponent("FreeMovementMotor");
         if (speed == null)
         {
-            speed = inputObject.GetComponent("KamikazeMovementMotor");
+            speed = unityObject.GetComponent("KamikazeMovementMotor");
             if (speed == null)
             {
-                speed = inputObject.GetComponent("MechMovementMotor");
+                speed = unityObject.GetComponent("MechMovementMotor");
             }
         }
 
@@ -98,50 +188,27 @@ public class StatsUpdaterLogic : MonoBehaviour
             {
                 if (field.Name == "flyingSpeed" || field.Name == "walkingSpeed")
                 {
-                    outputObject.MovementSpeed = (float)field.GetValue(speed);
+                    if (getFromFileAndSetInUnity)
+                        field.SetValue(speed, statsObject.MovementSpeed);
+                    else
+                        statsObject.MovementSpeed = (float)field.GetValue(speed);
                 }
                 else if (field.Name == "turningSpeed")
                 {
-                    outputObject.TurningSpeed = (float)field.GetValue(speed);
+                    if (getFromFileAndSetInUnity)
+                        field.SetValue(speed, statsObject.TurningSpeed);
+                    else
+                        statsObject.TurningSpeed = (float)field.GetValue(speed);
                 }
                 else if (field.Name == "aimingSpeed")
                 {
-                    outputObject.AimingSpeed = (float)field.GetValue(speed);
+                    if (getFromFileAndSetInUnity)
+                        field.SetValue(speed, statsObject.AimingSpeed);
+                    else
+                        statsObject.AimingSpeed = (float)field.GetValue(speed);
                 }
             }
         }
     }
-
-    public void ExportStats()
-    {
-        this.FillGameObjectsList();
-
-        foreach (GameObject gameObject in relevantGameObjects)
-        {
-            StatsObject newStatsObject = new StatsObject
-            {
-                Name = gameObject.name,
-                ScaleX = gameObject.transform.localScale.x,
-                ScaleY = gameObject.transform.localScale.y,
-                ScaleZ = gameObject.transform.localScale.z
-            };
-            SetHealthVariables(gameObject, newStatsObject);
-            SetSpeedVariables(gameObject, newStatsObject);
-
-            int firstOccurenceOfName = relevantGameObjectsNames.IndexOf(gameObject.name);
-            if (relevantGameObjectsNames.IndexOf(gameObject.name, firstOccurenceOfName + 1) >= 0)
-            {
-                stats.UnnamedEntities.Add(newStatsObject);
-            }
-            else
-            {
-                stats.NamedEntities.Add(newStatsObject);
-            }
-        }
-
-        using (var writer = new StreamWriter(FileName))
-        {
-            writer.Write((stats.Serialize()));
-        }
-    }
+    #endregion
 }

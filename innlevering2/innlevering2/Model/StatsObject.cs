@@ -1,5 +1,7 @@
 ﻿namespace innlevering2.Model
 {
+    using System;
+
     public class StatsObject
     {
         public string Name { get; set; }
@@ -16,5 +18,7 @@
         public float MovementSpeed { get; set; }
         public float TurningSpeed { get; set; }
         public float AimingSpeed { get; set; }
+
+        public int InstanceID { get; set; }
     }
 }
