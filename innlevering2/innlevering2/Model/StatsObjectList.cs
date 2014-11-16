@@ -16,7 +16,6 @@
         /// </summary>
         public string Serialize()
         {
-            //TODO: Fix settings
             var settings = new JsonSerializerSettings();
 
             // Convert object to json string.
