@@ -19,7 +19,7 @@ namespace innlevering2.ViewModel {
 	/// </summary>
 	public class MainViewModel : ViewModelBase {
 
-		#region Properties
+		#region public properties
 		public string UnNamedEntitiesName = "UnNamedEntities";
 
 		public List<StatsObject> UnNamedEntities {
@@ -79,7 +79,6 @@ namespace innlevering2.ViewModel {
 				RaisePropertyChanged();
 			}
 		}
-
 		#endregion
 
 		#region Commands
@@ -105,6 +104,7 @@ namespace innlevering2.ViewModel {
 		private string path { get; set; }
 		private string infoText { get; set; }
 		private string infoPicturePath { get; set; }
+		private bool canDeserialize { get; set; }
 
 		private StatsObjectList entities { get; set; }
 		private StatsObject selectedObject { get; set; }
@@ -118,9 +118,9 @@ namespace innlevering2.ViewModel {
 				NamedEntities = new List<StatsObject>()
 			};
 
-			path = "";
 			InfoPicturePath = "../Assets/mark.png";
 			InfoText = "Choose input file.";
+			canDeserialize = false;
 
 			CreateCommands();
 		}
@@ -131,22 +131,31 @@ namespace innlevering2.ViewModel {
 			ImportCommand = new RelayCommand(Import);
 		}
 
-
+		/// <summary>
+		/// Exports all current data to selected json file
+		/// </summary>
 		private void Export() {
 
-			if(UnNamedEntities.Count <= 0) {
+			if(!canDeserialize) {
 				return;
 			}
 
 			using(var writer = new StreamWriter(path)) {
 				writer.Write((entities.Serialize()));
 			}
+
 			InfoText = "Exported to: " + path ;
 			InfoPicturePath = "../Assets/save.png";
-
 		}
 
-		private void Import() {
+		/// <summary>
+		/// Imports data from chosen file
+		/// </summary>
+		private void Import()
+		{
+			if (path == null || !canDeserialize) {
+				return;
+			}
 
 			var jsonStream = new StreamReader(path);
 			var jsonString = jsonStream.ReadToEnd();
@@ -154,24 +163,33 @@ namespace innlevering2.ViewModel {
 			entities.Deserialize(jsonString);
 
 			jsonStream.Close();
+
 			RaisePropertyChanged("UnNamedEntities");
 			RaisePropertyChanged("NamedEntities");
 
 			InfoText = "Objects imported.";
 			InfoPicturePath = "../Assets/good.png";
 
-			SelectedObject = entities.UnnamedEntities[0];
-
+			//Set selected object to the first in the list
+			if (entities.UnnamedEntities.Count > 0)
+			{
+				SelectedObject = entities.UnnamedEntities[0];
+			}
 		}
 
+		/// <summary>
+		/// Changes path to the file you are working with
+		/// </summary>
 		private void ChangePath() {
 
 			var dlg = new Microsoft.Win32.OpenFileDialog { DefaultExt = ".json", Filter = "JSON Files (*.json)|*.json" };
 
 			var result = dlg.ShowDialog();
 
+			//if noe file is chosen
 			if(result != true) return;
 
+			//Tests json format
 			var jsonStream = new StreamReader(dlg.FileName);
 			var jsonString = jsonStream.ReadToEnd();
 
@@ -180,16 +198,18 @@ namespace innlevering2.ViewModel {
 				tempList.Deserialize(jsonString);
 
 				jsonStream.Close();
+
+				canDeserialize = true;
+
 				path = dlg.FileName;
 				Import();
 
-
+				//If format is not supported
 			} catch(Exception) {
-				InfoText = "Something went wrong. Please choose a valid json file";
+				InfoText = "Please choose a valid json file. (the one unity made, remember?)";
 				InfoPicturePath = "../Assets/error.png";
-
+				canDeserialize = false;
 			}
-
 		}
 	}
 }
