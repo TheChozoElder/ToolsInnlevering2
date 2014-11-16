@@ -1,9 +1,9 @@
+using System.IO;
+
 using UnityEngine;
 using UnityEditor;
 public class StatsUpdaterWindow : EditorWindow
 {
-    private string filePath = @"Assets\Scripts\StatsUpdater\stats.json";
-
     // Add menu named "My Window" to the Window menu
     [MenuItem("Window/Stats Updater")]
     static void Init()
@@ -16,19 +16,15 @@ public class StatsUpdaterWindow : EditorWindow
     { 
         if (GUILayout.Button("Import"))
         {
-            GameObject statsUpater = GameObject.Find("StatsUpdater");
-            StatsUpdaterLogic statsUpdaterLogic = statsUpater.GetComponent<StatsUpdaterLogic>();
-            statsUpdaterLogic.ImportStats(filePath);
+            StatsUpdaterLogic.ImportStats();
         }
         else if (GUILayout.Button("Export"))
         {
-            GameObject statsUpater = GameObject.Find("StatsUpdater");
-            StatsUpdaterLogic statsUpdaterLogic = statsUpater.GetComponent<StatsUpdaterLogic>();
-            statsUpdaterLogic.ExportStats(filePath);
+            StatsUpdaterLogic.ExportStats();
         }
         else if (GUILayout.Button("Change JSON file"))
         {
-            filePath = EditorUtility.OpenFilePanel("Select JSON file to use", "", "json");
+            StatsUpdaterLogic.filePath = EditorUtility.OpenFilePanel("Select JSON file to use", string.Empty, "json");
         }
     }
 }

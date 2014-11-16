@@ -1,32 +1,42 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using innlevering2.Model;
-using Newtonsoft.Json;
 using UnityEngine;
 using System.Reflection;
 
-public class StatsUpdaterLogic : MonoBehaviour
+public static class StatsUpdaterLogic
 {
+    //file path to json file
+    public static string filePath = @"Assets\Scripts\StatsUpdater\stats.json";
+
+    //name of parent component of all enemies (all objects you want to update, except for player)
     private const string EnemyParentComponent = "Enemies";
 
     #region Public Methods
-    public void ExportStats(string filePath)
+    /// <summary>
+    /// Write stats from Unity to file
+    /// </summary>
+    /// <param name="filePath"></param>
+    public static void ExportStats()
     {
+        //A list of the Unity GameObjects that will have their stats exported, and a list of their names
         List<GameObject> unityObjects = new List<GameObject>();
         List<string> unityObjectNames = new List<string>();
 
+        GetGameObjectsFromUnity(unityObjects, unityObjectNames, null);
+
+        //The class that will be serialized and written to file
         StatsObjectList statsObjects = new StatsObjectList
         {
             UnnamedEntities = new List<StatsObject>(),
             NamedEntities = new List<StatsObject>()
         };
 
-        GetGameObjectsFromUnity(unityObjects, unityObjectNames, null);
-
+        //creates new StatsObject per GameObject from Unity
         foreach (GameObject gameObject in unityObjects)
         {
+            //Set stats
             StatsObject newStatsObject = new StatsObject
             {
                 InstanceID = gameObject.GetInstanceID(),
@@ -40,6 +50,7 @@ public class StatsUpdaterLogic : MonoBehaviour
             SetHealthVariables(gameObject, newStatsObject, false);
             SetSpeedVariables(gameObject, newStatsObject, false);
 
+            //sort into named and unnamed entities (check if the objects name occurs more than once)
             int firstOccurenceOfName = unityObjectNames.IndexOf(gameObject.name);
             if (unityObjectNames.IndexOf(gameObject.name, firstOccurenceOfName + 1) >= 0)
             {
@@ -51,40 +62,51 @@ public class StatsUpdaterLogic : MonoBehaviour
             }
         }
 
+        //write to file
         using (var writer = new StreamWriter(filePath))
         {
             writer.Write((statsObjects.Serialize()));
         }
     }
 
-    public void ImportStats(string filePath)
+
+    public static void ImportStats()
     {
+        //A list of the Unity GameObjects that will have their stats imported, and a list of their unique ID's
         var unityObjects = new List<GameObject>();
         var unityObjectIDs = new List<int>();
 
+        GetGameObjectsFromUnity(unityObjects, null, unityObjectIDs);
+
+        //The class that will contain deserialized data from file
         var statsObjects = new StatsObjectList
         {
             UnnamedEntities = new List<StatsObject>(),
             NamedEntities = new List<StatsObject>()
         };
 
-        GetGameObjectsFromUnity(unityObjects, null, unityObjectIDs);
-
+        //read file
         var jsonStream = new StreamReader(filePath);
         var jsonString = jsonStream.ReadToEnd();
         jsonStream.Close();
 
+        //deserialize file into our class
         statsObjects.Deserialize(jsonString);
 
+        //update stats in Unity
         foreach (StatsObject statsObject in statsObjects)
         {
-            int currentObjectID = 0;
-            int currentObjectIDIndex = -1;
-            while (currentObjectID != statsObject.InstanceID )
+            /* We pair objects from the file with objects in Unity by Unity's unique identifires.
+             * These identifiers might change everytime the game is restarted, so exporting and importing should be done in the same session!*/
+            int currentObjectIDIndex = 0;
+            int currentObjectID = unityObjectIDs[currentObjectIDIndex];
+            while (currentObjectID != statsObject.InstanceID && currentObjectIDIndex < unityObjectIDs.Count)
             {
-                currentObjectIDIndex++;
                 currentObjectID = unityObjectIDs[currentObjectIDIndex];
+                currentObjectIDIndex++;
             }
+            if (currentObjectIDIndex >= unityObjectIDs.Count)
+                break;
             Debug.Log(unityObjects.Count);
             GameObject unityObject = unityObjects[currentObjectIDIndex];
 
@@ -96,7 +118,13 @@ public class StatsUpdaterLogic : MonoBehaviour
     #endregion
 
     #region Private Methods
-    private void GetGameObjectsFromUnity(List<GameObject> listOfObjectsToFill, List<string> listOfNamesToFill, List<int> listOfIDsToFill)
+    /// <summary>
+    /// Fill lists with data from Unity
+    /// </summary>
+    /// <param name="listOfObjectsToFill"></param>
+    /// <param name="listOfNamesToFill">Can be null</param>
+    /// <param name="listOfIDsToFill">Can be null</param>
+    private static void GetGameObjectsFromUnity(List<GameObject> listOfObjectsToFill, List<string> listOfNamesToFill, List<int> listOfIDsToFill)
     {
         GameObject player = GameObject.Find("Player");
         listOfObjectsToFill.Add(player);
@@ -108,8 +136,14 @@ public class StatsUpdaterLogic : MonoBehaviour
         GameObject enemies = GameObject.Find(EnemyParentComponent);
         GetChildrenWithHealthScript(enemies.transform, listOfObjectsToFill, listOfNamesToFill, listOfIDsToFill);
     }
-
-    private void GetChildrenWithHealthScript(Transform parent, List<GameObject> listOfObjectsToFill, List<string> listOfNamesToFill, List<int> listOfIDsToFill)
+    /// <summary>
+    /// Recursive method to add GameObjects containing a "Health"-script to our list
+    /// </summary>
+    /// <param name="parent">Parent to search in</param>
+    /// <param name="listOfObjectsToFill"></param>
+    /// <param name="listOfNamesToFill">Can be null</param>
+    /// <param name="listOfIDsToFill">Can be null</param>
+    private static void GetChildrenWithHealthScript(Transform parent, List<GameObject> listOfObjectsToFill, List<string> listOfNamesToFill, List<int> listOfIDsToFill)
     {
         foreach (Transform possiblyRelevantObject in parent.transform)
         {
@@ -128,7 +162,13 @@ public class StatsUpdaterLogic : MonoBehaviour
         }
     }
 
-    private void SetHealthVariables(GameObject unityObject, StatsObject statsObject, bool getFromFileAndSetInUnity)
+    /// <summary>
+    /// Updates the stats related to health, either from Unity to file, or from file to Unity
+    /// </summary>
+    /// <param name="unityObject"></param>
+    /// <param name="statsObject"></param>
+    /// <param name="getFromFileAndSetInUnity">Are you importing from file into Unity?</param>
+    private static void SetHealthVariables(GameObject unityObject, StatsObject statsObject, bool getFromFileAndSetInUnity)
     {
         Component health = unityObject.GetComponent("Health");
         if (health != null)
@@ -168,7 +208,13 @@ public class StatsUpdaterLogic : MonoBehaviour
         }
     }
 
-    private void SetSpeedVariables(GameObject unityObject, StatsObject statsObject, bool getFromFileAndSetInUnity)
+    /// <summary>
+    /// Updates the stats related to speed, either from Unity to file, or from file to Unity
+    /// </summary>
+    /// <param name="unityObject"></param>
+    /// <param name="statsObject"></param>
+    /// <param name="getFromFileAndSetInUnity">Are you importing from file into Unity?</param>
+    private static void SetSpeedVariables(GameObject unityObject, StatsObject statsObject, bool getFromFileAndSetInUnity)
     {
         Component speed = unityObject.GetComponent("FreeMovementMotor");
         if (speed == null)
